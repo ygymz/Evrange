@@ -68,7 +68,7 @@ export default function RangeDisplay({ result, vehicle }: Props) {
   return (
     <div className="flex flex-col items-center gap-6">
       {/* Circular arc + main number */}
-      <div className="relative flex items-center justify-center">
+      <div className="relative flex items-center justify-center w-[148px] h-[148px]">
         <svg width="148" height="148" className="absolute" style={{ transform: 'rotate(-90deg)' }}>
           {/* Background track */}
           <circle
