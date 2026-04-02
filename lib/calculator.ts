@@ -84,6 +84,13 @@ export const VEHICLES: Vehicle[] = [
     physics: { mass: 2003, cd: 0.23, frontalArea: 2.62, crr: 0.009, drivetrainEff: 0.90, regenEff: 0.60, hasHeatPump: true },
   },
   {
+    id: 'tesla-my-legacy-sr',
+    name: 'Tesla Model Y Legacy Standard RWD',
+    battery: 53.5,
+    baseWh: 157,
+    physics: { mass: 1984, cd: 0.23, frontalArea: 2.62, crr: 0.009, drivetrainEff: 0.90, regenEff: 0.60, hasHeatPump: true },
+  },
+  {
     id: 'ioniq6-sr',
     name: 'Hyundai Ioniq 6 SR',
     battery: 50.0,
