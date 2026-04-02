@@ -51,12 +51,19 @@ export default function FactorControls({
   return (
     <div className="space-y-5">
       {/* Climate Control */}
-      <ToggleSwitch
-        label={t('factor.climate')}
-        sublabel={climateControl ? t('factor.climate.on') : t('factor.climate.off')}
-        checked={climateControl}
-        onChange={onClimateControl}
-      />
+      <div>
+        <ToggleSwitch
+          label={t('factor.climate')}
+          sublabel={climateControl ? t('factor.climate.on') : t('factor.climate.off')}
+          checked={climateControl}
+          onChange={onClimateControl}
+        />
+        {climateControl && (
+          <div className="mt-2 text-[10px] text-ink-muted leading-relaxed bg-surface px-2.5 py-1.5 rounded-md border border-border">
+            {t('factor.climate.notice')}
+          </div>
+        )}
+      </div>
 
       <div className="border-t border-border" />
 
@@ -81,7 +88,7 @@ export default function FactorControls({
           onChange={(e) => onExtraLoad(Number(e.target.value))}
           className="slider-track w-full"
           style={{
-            background: `linear-gradient(to right, #6366F1 ${loadPct}%, #E5E2DA ${loadPct}%)`,
+            background: `linear-gradient(to right, #6366F1 ${loadPct}%, var(--border) ${loadPct}%)`,
           }}
         />
         <div className="flex justify-between">
@@ -110,7 +117,7 @@ export default function FactorControls({
               className={`p-3 rounded-xl border text-center transition-all duration-150 ${
                 rimSize === opt.size
                   ? 'border-accent bg-accent-light text-accent'
-                  : 'border-border bg-white text-ink-tertiary hover:border-border-hover hover:text-ink-secondary'
+                  : 'border-border bg-surface-card text-ink-tertiary hover:border-border-hover hover:text-ink-secondary'
               }`}
             >
               <div className="num text-lg font-bold">{opt.label}</div>

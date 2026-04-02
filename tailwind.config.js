@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -13,23 +14,24 @@ module.exports = {
       },
       colors: {
         surface: {
-          DEFAULT: '#F6F5F0',
-          card: '#FFFFFF',
+          DEFAULT: 'var(--bg)',
+          card: 'var(--bg-card)',
+          glass: 'var(--bg-glass)',
         },
         border: {
-          DEFAULT: '#E5E2DA',
-          hover: '#D0CCC3',
+          DEFAULT: 'var(--border)',
+          hover: 'var(--border-hover)',
         },
         ink: {
-          DEFAULT: '#1C1C1C',
-          secondary: '#5C5950',
-          tertiary: '#9B978E',
-          muted: '#C4C0B8',
+          DEFAULT: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
+          tertiary: 'var(--text-tertiary)',
+          muted: 'var(--text-muted)',
         },
         accent: {
-          DEFAULT: '#0F766E',
-          light: '#E6F5F2',
-          mid: '#99D5CC',
+          DEFAULT: 'var(--accent)',
+          light: 'var(--accent-light)',
+          mid: 'var(--accent-mid)',
         },
       },
       animation: {

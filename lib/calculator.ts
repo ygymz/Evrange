@@ -114,7 +114,7 @@ export const VEHICLES: Vehicle[] = [
   {
     id: 'ioniq6-sr',
     name: 'Hyundai Ioniq 6 SR (RWD)',
-    battery: 50.0,
+    battery: 53.0,
     baseWh: 139,
     physics: { mass: 1775, cd: 0.21, frontalArea: 2.36, crr: 0.009, drivetrainEff: 0.92, regenEff: 0.70, hasHeatPump: true },
   },
@@ -158,7 +158,7 @@ export const VEHICLES: Vehicle[] = [
     name: 'Togg T10F Uzun Menzil',
     battery: 85.0,
     baseWh: 148,
-    physics: { mass: 2000, cd: 0.226, frontalArea: 2.33, crr: 0.009, drivetrainEff: 0.90, regenEff: 0.65, hasHeatPump: true },
+    physics: { mass: 2000, cd: 0.226, frontalArea: 2.33, crr: 0.009, drivetrainEff: 0.90, regenEff: 0.65, hasHeatPump: false },
   },
   {
     id: 'renault-megane',
@@ -171,17 +171,41 @@ export const VEHICLES: Vehicle[] = [
 
 // ── HVAC Auxiliary Power (watts) ────────────────────────────────────────────
 function hvacPower(tempC: number, hasHeatPump: boolean): number {
-  if (tempC < -10) return hasHeatPump ? 2000 : 4000
-  if (tempC < 5)   return hasHeatPump ? 1200 : 3000
-  if (tempC > 35)  return 1000
-  if (tempC > 25)  return 800
-  return 300
+  const targetC = 22
+  const deltaT = targetC - tempC
+
+  if (deltaT > 0) {
+    // Heating logic: Base load + deltaT slope
+    const heatingRequired = 200 + deltaT * 110 // Watts
+
+    if (hasHeatPump) {
+      // Heat pump COP (Coefficient of Performance) scales linearly with tempC
+      // COP is usually ~3.5 at 15°C and drops to ~1.0 at -15°C
+      const cop = Math.max(1.0, 1.2 + (tempC + 15) * 0.075)
+      return heatingRequired / cop
+    }
+    return heatingRequired
+  } else if (deltaT < 0) {
+    // Cooling logic (A/C is generally more efficient and scales slower)
+    const coolingDelta = Math.abs(deltaT)
+    const coolingRequired = 150 + coolingDelta * 60
+    return Math.min(3000, coolingRequired) // Capped at 3kW for AC max output
+  }
+  
+  // Just fan running at target temp
+  return 100
 }
 
 // ── Thermal Battery Penalty ─────────────────────────────────────────────────
 function thermalBatteryFactor(tempC: number): number {
-  if (tempC < 5)  return 1 + (5 - tempC) * 0.008
-  if (tempC > 40) return 1 + (tempC - 40) * 0.003
+  if (tempC <= 20) {
+    // Cold temps increase internal resistance and lower deliverable energy curve
+    return 1 + Math.pow(20 - tempC, 1.5) * 0.0015
+  }
+  if (tempC > 35) {
+    // Extreme heat requires battery active cooling overhead
+    return 1 + Math.pow(tempC - 35, 1.2) * 0.003
+  }
   return 1.0
 }
 
@@ -268,8 +292,8 @@ function calculateRangePhysics(inputs: CalculatorInputs): CalculatorResult {
 
   const efficiencyLabel: CalculatorResult['efficiencyLabel'] =
     consumption < 160 ? 'Excellent' :
-    consumption < 200 ? 'Good' :
-    consumption < 250 ? 'Fair' : 'Poor'
+      consumption < 200 ? 'Good' :
+        consumption < 250 ? 'Fair' : 'Poor'
 
   return {
     range,

@@ -41,7 +41,7 @@ export default function VehicleSelector({ selected, onSelect }: Props) {
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-border rounded-xl z-50 overflow-hidden shadow-lg shadow-black/5">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-surface-card border border-border rounded-xl z-50 overflow-hidden shadow-lg shadow-black/5 dark:shadow-black/50">
           <div className="p-1">
             {VEHICLES.map((v) => (
               <button

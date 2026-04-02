@@ -8,7 +8,10 @@ import {
   SlidersHorizontal,
   RotateCcw,
   Languages,
+  Moon,
+  Sun,
 } from 'lucide-react'
+import { useTheme } from 'next-themes'
 import { VEHICLES, Vehicle, DrivingMix, calculateRange } from '@/lib/calculator'
 import VehicleSelector from '@/components/VehicleSelector'
 import SliderControl from '@/components/SliderControl'
@@ -42,6 +45,7 @@ function loadState(): Partial<PersistedState> {
 
 export default function Home() {
   const { t, language, setLanguage } = useTranslation()
+  const { theme, setTheme } = useTheme()
   const [initialized, setInitialized] = useState(false)
 
   // Vehicle
@@ -125,7 +129,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b border-border sticky top-0 z-40 bg-surface/80 backdrop-blur-sm">
+      <header className="border-b border-border sticky top-0 z-40 bg-surface-glass backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
@@ -140,16 +144,25 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-2">
+            {initialized && (
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="flex items-center justify-center w-8 h-8 rounded-lg border border-border text-ink-tertiary hover:text-ink-secondary hover:border-border-hover dark:hover:bg-surface-card hover:bg-white transition-all"
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+              </button>
+            )}
             <button
               onClick={() => setLanguage(language === 'en' ? 'tr' : 'en')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-ink-tertiary hover:text-ink-secondary hover:border-border-hover hover:bg-white transition-all text-xs font-medium"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-ink-tertiary hover:text-ink-secondary hover:border-border-hover dark:hover:bg-surface-card hover:bg-white transition-all text-xs font-medium"
             >
               <Languages size={12} />
               {language.toUpperCase()}
             </button>
             <button
               onClick={handleReset}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-ink-tertiary hover:text-ink-secondary hover:border-border-hover hover:bg-white transition-all text-xs font-medium"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-ink-tertiary hover:text-ink-secondary hover:border-border-hover dark:hover:bg-surface-card hover:bg-white transition-all text-xs font-medium"
             >
               <RotateCcw size={12} />
               {t('app.reset')}
@@ -184,7 +197,7 @@ export default function Home() {
                 max={180}
                 unit="km/h"
                 icon={<Gauge size={14} />}
-                colorStops="#0F766E"
+                colorStops="var(--accent)"
                 onChange={setSpeed}
               />
               <div className="border-t border-border" />

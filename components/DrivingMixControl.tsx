@@ -15,13 +15,13 @@ const SEGMENTS = [
     label: 'City',
     sublabel: 'Regen braking',
     icon: Building2,
-    color: '#0F766E',
+    color: 'var(--accent)',
     barColor: 'bg-accent',
     textColor: 'text-accent',
-    bgColor: 'bg-accent-light',
-    borderColor: 'border-accent/20',
+    bgColor: 'bg-accent-light dark:bg-accent/10',
+    borderColor: 'border-accent/20 dark:border-accent/30',
     badge: 'Regen',
-    badgeStyle: 'text-accent bg-accent-light',
+    badgeStyle: 'text-accent bg-accent-light dark:bg-accent/20',
   },
   {
     key: 'highway' as const,
@@ -30,11 +30,11 @@ const SEGMENTS = [
     icon: Milestone,
     color: '#6366F1',
     barColor: 'bg-indigo-500',
-    textColor: 'text-indigo-600',
-    bgColor: 'bg-indigo-50',
-    borderColor: 'border-indigo-200',
+    textColor: 'text-indigo-600 dark:text-indigo-400',
+    bgColor: 'bg-indigo-50 dark:bg-indigo-500/10',
+    borderColor: 'border-indigo-200 dark:border-indigo-500/30',
     badge: 'Aero',
-    badgeStyle: 'text-amber-700 bg-amber-50',
+    badgeStyle: 'text-indigo-700 bg-indigo-50 dark:text-indigo-300 dark:bg-indigo-900/50',
   },
   {
     key: 'rough' as const,
@@ -43,11 +43,11 @@ const SEGMENTS = [
     icon: Mountain,
     color: '#D97706',
     barColor: 'bg-amber-500',
-    textColor: 'text-amber-600',
-    bgColor: 'bg-amber-50',
-    borderColor: 'border-amber-200',
+    textColor: 'text-amber-600 dark:text-amber-400',
+    bgColor: 'bg-amber-50 dark:bg-amber-500/10',
+    borderColor: 'border-amber-200 dark:border-amber-500/30',
     badge: 'Resist.',
-    badgeStyle: 'text-red-600 bg-red-50',
+    badgeStyle: 'text-amber-700 bg-amber-50 dark:text-amber-300 dark:bg-amber-900/50',
   },
 ]
 
@@ -132,7 +132,7 @@ export default function DrivingMixControl({ mix, onChange }: Props) {
                 onChange={(e) => handleChange(seg.key, Number(e.target.value))}
                 className="slider-track w-full"
                 style={{
-                  background: `linear-gradient(to right, ${seg.color} ${mix[seg.key]}%, #E5E2DA ${mix[seg.key]}%)`,
+                  background: `linear-gradient(to right, ${seg.color} ${mix[seg.key]}%, var(--border) ${mix[seg.key]}%)`,
                 }}
               />
             </div>

@@ -4,6 +4,7 @@
 
 :root {
   --bg: #F6F5F0;
+  --bg-glass: rgba(246, 245, 240, 0.85);
   --bg-card: #FFFFFF;
   --border: #E5E2DA;
   --border-hover: #D0CCC3;
@@ -17,6 +18,24 @@
   --success: #0F766E;
   --warning: #B8860B;
   --danger: #B83B3B;
+}
+
+.dark {
+  --bg: #121212;
+  --bg-glass: rgba(18, 18, 18, 0.85);
+  --bg-card: #1E1E1E;
+  --border: #333333;
+  --border-hover: #4A4A4A;
+  --text-primary: #EDEDED;
+  --text-secondary: #A1A1AA;
+  --text-tertiary: #71717A;
+  --text-muted: #52525B;
+  --accent: #2DD4BF;
+  --accent-light: #134E4A;
+  --accent-mid: #0D9488;
+  --success: #2DD4BF;
+  --warning: #FBBF24;
+  --danger: #F87171;
 }
 
 * {

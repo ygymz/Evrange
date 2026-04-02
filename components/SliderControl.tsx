@@ -29,7 +29,7 @@ export default function SliderControl({
   const accentColor = colorStops || '#0F766E'
 
   const trackStyle = {
-    background: `linear-gradient(to right, ${accentColor} ${pct}%, #E5E2DA ${pct}%)`,
+    background: `linear-gradient(to right, ${accentColor} ${pct}%, var(--border) ${pct}%)`,
   }
 
   const displayValue = formatValue ? formatValue(value) : value
