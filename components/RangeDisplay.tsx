@@ -96,7 +96,7 @@ export default function RangeDisplay({ result, vehicle }: Props) {
           <div className={`num text-5xl font-bold leading-none ${rangeColor} transition-colors duration-500`}>
             <AnimatedNumber value={result.range} />
           </div>
-          <div className="text-[11px] font-semibold text-ink-muted mt-1.5 uppercase tracking-widest">km</div>
+          <div className="text-[11px] font-semibold text-ink-muted uppercase tracking-widest">km</div>
         </div>
       </div>
 

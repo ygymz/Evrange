@@ -78,7 +78,7 @@ export const VEHICLES: Vehicle[] = [
   },
   {
     id: 'tesla-my-legacy-sr',
-    name: 'Tesla Model Y Legacy St. RWD',
+    name: 'Tesla Model Y Legacy RWD',
     battery: 57.0,
     baseWh: 157,
     physics: { mass: 1984, cd: 0.23, frontalArea: 2.62, crr: 0.009, drivetrainEff: 0.90, regenEff: 0.60, hasHeatPump: true },
