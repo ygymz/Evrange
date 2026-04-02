@@ -21,7 +21,7 @@ import FactorControls from '@/components/FactorControls'
 import { useTranslation } from '@/lib/i18n'
 
 const DEFAULT_MIX: DrivingMix = { city: 10, highway: 90, rough: 0 }
-const STORAGE_KEY = 'ev-range-hero-state'
+const STORAGE_KEY = 'truerange-state'
 
 interface PersistedState {
   vehicleId: string

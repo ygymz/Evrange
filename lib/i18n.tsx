@@ -8,7 +8,7 @@ type Translations = Record<string, string>
 
 const en: Translations = {
   // layout/page.tsx
-  'app.title': 'EV Range Hero',
+  'app.title': 'TrueRange',
   'app.subtitle': 'Real-World Calculator',
   'app.reset': 'Reset',
   'section.vehicle': 'Vehicle',
@@ -17,7 +17,7 @@ const en: Translations = {
   'section.envLoad': 'Environment & Load',
   'badge.total100': 'Must total 100%',
   'footer.disclaimer': 'All calculations are estimates based on physics-based aerodynamic and resistance modeling. Actual range varies with driving style and road conditions.',
-  'footer.credits': 'EV Range Hero · Physics-based range modeling',
+  'footer.credits': 'TrueRange · Physics-based range modeling',
   'sidebar.activeConditions': 'Active Conditions',
   
   // Mix
@@ -69,7 +69,7 @@ const en: Translations = {
 }
 
 const tr: Translations = {
-  'app.title': 'EV Range Hero',
+  'app.title': 'TrueRange',
   'app.subtitle': 'Gerçek Dünya Hesaplayıcısı',
   'app.reset': 'Sıfırla',
   'section.vehicle': 'Araç',
@@ -78,7 +78,7 @@ const tr: Translations = {
   'section.envLoad': 'Çevre ve Yük',
   'badge.total100': 'Toplam 100% olmalı',
   'footer.disclaimer': 'Tüm hesaplamalar aerodinamik ve fizik tabanlı direnç modellemelerine dayalı tahminlerdir. Gerçek menzil sürüş stiline ve yol koşullarına göre değişiklik gösterir.',
-  'footer.credits': 'EV Range Hero · Fizik tabanlı menzil hesaplama',
+  'footer.credits': 'TrueRange · Fizik tabanlı menzil hesaplama',
   'sidebar.activeConditions': 'Aktif Koşullar',
   
   'mix.city': 'Şehir İçi',

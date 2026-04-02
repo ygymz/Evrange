@@ -4,9 +4,9 @@ import { LanguageProvider } from '@/lib/i18n'
 import { ThemeProvider } from '@/components/theme-provider'
 
 export const metadata: Metadata = {
-  title: 'EV Range Hero — Real-World Range Calculator',
+  title: 'TrueRange — Real-World Range Calculator',
   description:
-    'Calculate your electric vehicle range under real-world conditions. Account for temperature, speed, terrain, load, and more.',
+    'Calculates real world EV range based on physics parameters. Account for temperature, speed, terrain, load, and more.',
   keywords: 'EV range calculator, electric vehicle, range anxiety, battery range, EV calculator',
 }
 
