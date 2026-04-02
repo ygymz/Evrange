@@ -136,7 +136,7 @@ interface LanguageContextProps {
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('en')
+  const [language, setLanguageState] = useState<Language>('tr')
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
@@ -144,7 +144,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem('ev-range-lang') as Language
     if (stored === 'en' || stored === 'tr') {
       setLanguageState(stored)
-    } else if (navigator.language.startsWith('tr')) {
+    } else if (navigator.language.startsWith('en')) {
+      setLanguageState('en')
+    } else {
       setLanguageState('tr')
     }
   }, [])
@@ -155,9 +157,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }
 
   const t = (key: string, params?: Record<string, string | number>) => {
-    // Before client hydrates, default to 'en' to match server render and prevent hydration mismatch
-    const dict = dictionaries[isClient ? language : 'en']
-    let str = dict[key] || en[key] || key
+    // Before client hydrates, default to 'tr' to match server render and prevent hydration mismatch
+    const dict = dictionaries[isClient ? language : 'tr']
+    let str = dict[key] || tr[key] || key
     if (params) {
       Object.entries(params).forEach(([k, v]) => {
         str = str.replace(`{${k}}`, String(v))
