@@ -122,16 +122,3 @@ export function calculateRange(inputs: CalculatorInputs): CalculatorResult {
   }
 }
 
-export function getRangeColor(range: number, maxRange: number): string {
-  const ratio = range / maxRange
-  if (ratio > 0.65) return 'text-green-400'
-  if (ratio > 0.35) return 'text-orange-400'
-  return 'text-red-400'
-}
-
-export function getRangeGlow(range: number, maxRange: number): string {
-  const ratio = range / maxRange
-  if (ratio > 0.65) return 'glow-green'
-  if (ratio > 0.35) return 'glow-orange'
-  return 'glow-red'
-}

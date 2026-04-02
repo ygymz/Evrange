@@ -2,12 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 5, 5, 15;
-  --background-end-rgb: 8, 10, 25;
+  --bg: #F6F5F0;
+  --bg-card: #FFFFFF;
+  --border: #E5E2DA;
+  --border-hover: #D0CCC3;
+  --text-primary: #1C1C1C;
+  --text-secondary: #5C5950;
+  --text-tertiary: #9B978E;
+  --text-muted: #C4C0B8;
+  --accent: #0F766E;
+  --accent-light: #E6F5F2;
+  --accent-mid: #99D5CC;
+  --success: #0F766E;
+  --warning: #B8860B;
+  --danger: #B83B3B;
 }
 
 * {
@@ -15,79 +24,94 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-    135deg,
-    rgb(var(--background-start-rgb)) 0%,
-    rgb(5, 7, 20) 50%,
-    rgb(var(--background-end-rgb)) 100%
-  );
+  color: var(--text-primary);
+  background: var(--bg);
   min-height: 100vh;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
 }
 
-/* Glass Card */
-.glass-card {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1rem;
+/* Subtle noise texture via SVG data URI */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
 }
 
-.glass-card-strong {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 1.25rem;
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: border-color 0.2s ease;
 }
 
-/* Custom Slider */
+.card:hover {
+  border-color: var(--border-hover);
+}
+
+.card-strong {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.03);
+}
+
+/* Slider */
 .slider-track {
   -webkit-appearance: none;
   appearance: none;
-  height: 6px;
-  border-radius: 3px;
+  height: 5px;
+  border-radius: 100px;
   outline: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .slider-track::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: white;
+  background: var(--bg-card);
+  border: 2px solid var(--accent);
   cursor: pointer;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2), 0 4px 8px rgba(0, 0, 0, 0.4);
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  transition: all 0.15s ease;
 }
 
 .slider-track::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.5);
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.slider-track::-webkit-slider-thumb:active {
+  background: var(--accent);
 }
 
 .slider-track::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: white;
+  background: var(--bg-card);
+  border: 2px solid var(--accent);
   cursor: pointer;
-  border: none;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2), 0 4px 8px rgba(0, 0, 0, 0.4);
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  transition: all 0.15s ease;
 }
 
 /* Toggle Switch */
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 48px;
-  height: 26px;
+  width: 44px;
+  height: 24px;
 }
 
 .toggle-switch input {
@@ -99,14 +123,10 @@ body {
 .toggle-slider {
   position: absolute;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 13px;
-  transition: 0.3s;
+  inset: 0;
+  background: var(--border);
+  border-radius: 12px;
+  transition: 0.25s ease;
 }
 
 .toggle-slider:before {
@@ -116,19 +136,18 @@ body {
   width: 18px;
   left: 3px;
   bottom: 3px;
-  background-color: rgba(255, 255, 255, 0.6);
+  background: white;
   border-radius: 50%;
-  transition: 0.3s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: 0.25s ease;
 }
 
 input:checked + .toggle-slider {
-  background: linear-gradient(135deg, #3b82f6, #06b6d4);
-  border-color: #3b82f6;
+  background: var(--accent);
 }
 
 input:checked + .toggle-slider:before {
-  transform: translateX(22px);
-  background-color: white;
+  transform: translateX(20px);
 }
 
 /* Scrollbar */
@@ -137,45 +156,30 @@ input:checked + .toggle-slider:before {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--border);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--border-hover);
 }
 
 /* Range number animation */
 @keyframes countUp {
-  from { opacity: 0; transform: scale(0.95) translateY(5px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .range-number {
   animation: countUp 0.2s ease-out;
 }
 
-/* Glow effects */
-.glow-green {
-  text-shadow: 0 0 30px rgba(34, 197, 94, 0.6), 0 0 60px rgba(34, 197, 94, 0.3);
-}
-
-.glow-orange {
-  text-shadow: 0 0 30px rgba(251, 146, 60, 0.6), 0 0 60px rgba(251, 146, 60, 0.3);
-}
-
-.glow-red {
-  text-shadow: 0 0 30px rgba(239, 68, 68, 0.6), 0 0 60px rgba(239, 68, 68, 0.3);
-}
-
-/* Grid background */
-.bg-grid {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 40px 40px;
+/* Number styling — uses mono font */
+.num {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
 }

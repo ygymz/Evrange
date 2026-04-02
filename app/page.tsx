@@ -7,7 +7,6 @@ import {
   Zap,
   SlidersHorizontal,
   RotateCcw,
-  ChevronDown,
 } from 'lucide-react'
 import { VEHICLES, Vehicle, DrivingMix, calculateRange } from '@/lib/calculator'
 import VehicleSelector from '@/components/VehicleSelector'
@@ -62,9 +61,6 @@ export default function Home() {
   const [windDirection, setWindDirection] = useState<'headwind' | 'tailwind' | 'none'>('none')
   const [extraLoad, setExtraLoad] = useState(0)
   const [rimSize, setRimSize] = useState<'18' | '20'>('18')
-
-  // Accordion sections on mobile
-  const [openSection, setOpenSection] = useState<string | null>('primary')
 
   // Hydrate from localStorage on mount
   useEffect(() => {
@@ -146,52 +142,18 @@ export default function Home() {
 
   const formatTemp = (v: number) => (v >= 0 ? `+${v}` : `${v}`)
 
-  const AccordionSection = ({
-    id,
-    title,
-    icon: Icon,
-    children,
-  }: {
-    id: string
-    title: string
-    icon: React.ElementType
-    children: React.ReactNode
-  }) => {
-    const isOpen = openSection === id
-    return (
-      <div className="glass-card overflow-hidden">
-        <button
-          onClick={() => setOpenSection(isOpen ? null : id)}
-          className="w-full flex items-center justify-between px-5 py-4 text-left"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-white/8 flex items-center justify-center">
-              <Icon size={14} className="text-white/60" />
-            </div>
-            <span className="text-sm font-semibold text-white/80">{title}</span>
-          </div>
-          <ChevronDown
-            size={16}
-            className={`text-white/30 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-          />
-        </button>
-        {isOpen && <div className="px-5 pb-5">{children}</div>}
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-40 bg-black/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <header className="border-b border-border sticky top-0 z-40 bg-surface/80 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
-              <Zap size={18} className="text-white" strokeWidth={2.5} />
+            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
+              <Zap size={16} className="text-white" strokeWidth={2.5} />
             </div>
             <div>
-              <div className="text-base font-bold text-white leading-none">EV Range Hero</div>
-              <div className="text-[10px] text-white/35 font-medium tracking-wider uppercase">
+              <div className="text-base font-bold text-ink leading-none tracking-tight">EV Range Hero</div>
+              <div className="text-[10px] text-ink-muted font-medium tracking-wider uppercase mt-0.5">
                 Real-World Calculator
               </div>
             </div>
@@ -199,7 +161,7 @@ export default function Home() {
 
           <button
             onClick={handleReset}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/8 text-white/40 hover:text-white/70 hover:bg-white/8 hover:border-white/15 transition-all text-xs font-medium"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-ink-tertiary hover:text-ink-secondary hover:border-border-hover hover:bg-white transition-all text-xs font-medium"
           >
             <RotateCcw size={12} />
             Reset
@@ -208,24 +170,22 @@ export default function Home() {
       </header>
 
       {/* Main */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 items-start">
+      <main className="max-w-6xl mx-auto px-5 sm:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
 
-          {/* ── LEFT COLUMN — Controls ── */}
-          <div className="space-y-6">
+          {/* LEFT COLUMN — Controls */}
+          <div className="space-y-5">
 
             {/* Section label */}
-            <div className="flex items-center gap-3">
-              <div className="w-5 h-5 rounded-md bg-blue-500/20 flex items-center justify-center">
-                <SlidersHorizontal size={11} className="text-blue-400" />
-              </div>
-              <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest">
+            <div className="flex items-center gap-2.5">
+              <SlidersHorizontal size={13} className="text-ink-muted" />
+              <h2 className="text-[11px] font-semibold text-ink-muted uppercase tracking-widest">
                 Configure Your Journey
               </h2>
             </div>
 
             {/* Vehicle Selector */}
-            <div className="glass-card p-5 space-y-4">
+            <div className="card p-5 space-y-4">
               <SectionHeader icon={Zap} title="Vehicle" />
               <VehicleSelector
                 selected={vehicle}
@@ -238,7 +198,7 @@ export default function Home() {
             </div>
 
             {/* Primary Sliders */}
-            <div className="glass-card p-5 space-y-6">
+            <div className="card p-5 space-y-6">
               <SectionHeader icon={Gauge} title="Speed & Temperature" />
               <SliderControl
                 label="Speed"
@@ -247,10 +207,10 @@ export default function Home() {
                 max={180}
                 unit="km/h"
                 icon={<Gauge size={14} />}
-                colorStops="#3b82f6"
+                colorStops="#0F766E"
                 onChange={setSpeed}
               />
-              <div className="border-t border-white/5" />
+              <div className="border-t border-border" />
               <SliderControl
                 label="Temperature"
                 value={temperature}
@@ -258,14 +218,14 @@ export default function Home() {
                 max={45}
                 unit="°C"
                 icon={<Thermometer size={14} />}
-                colorStops={temperature < 0 ? '#06b6d4' : temperature < 20 ? '#3b82f6' : '#f59e0b'}
+                colorStops={temperature < 0 ? '#0891B2' : temperature < 20 ? '#6366F1' : '#D97706'}
                 formatValue={formatTemp}
                 onChange={setTemperature}
               />
             </div>
 
             {/* Driving Mix */}
-            <div className="glass-card p-5 space-y-4">
+            <div className="card p-5 space-y-4">
               <SectionHeader
                 icon={SlidersHorizontal}
                 title="Driving Mix"
@@ -275,7 +235,7 @@ export default function Home() {
             </div>
 
             {/* Environment & Load */}
-            <div className="glass-card p-5 space-y-4">
+            <div className="card p-5 space-y-4">
               <SectionHeader icon={Thermometer} title="Environment & Load" />
               <FactorControls
                 climateControl={climateControl}
@@ -290,45 +250,32 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ── RIGHT COLUMN — Output ── */}
-          <div className="lg:sticky lg:top-24 space-y-6">
-            {/* Range Hero Card */}
-            <div className="glass-card-strong p-8 relative overflow-hidden">
-              {/* Ambient glow */}
-              <div
-                className={`absolute inset-0 opacity-5 blur-3xl pointer-events-none transition-all duration-1000 ${
-                  result.range / Math.round((activeVehicle.battery * 1000) / activeVehicle.baseWh) > 0.65
-                    ? 'bg-emerald-400'
-                    : result.range / Math.round((activeVehicle.battery * 1000) / activeVehicle.baseWh) > 0.35
-                    ? 'bg-orange-400'
-                    : 'bg-red-400'
-                }`}
-              />
-
-              <div className="relative z-10">
-                <div className="text-center mb-6">
-                  <div className="text-xs font-semibold text-white/30 uppercase tracking-widest">
-                    {activeVehicle.name}
-                  </div>
-                  <div className="text-[10px] text-white/20 mt-0.5">
-                    {activeVehicle.battery} kWh · {activeVehicle.baseWh} Wh/km base
-                  </div>
+          {/* RIGHT COLUMN — Output */}
+          <div className="lg:sticky lg:top-24 space-y-5">
+            {/* Range Card */}
+            <div className="card-strong p-7">
+              <div className="text-center mb-5">
+                <div className="text-[11px] font-semibold text-ink-tertiary uppercase tracking-widest">
+                  {activeVehicle.name}
                 </div>
-
-                <RangeDisplay
-                  result={result}
-                  vehicle={activeVehicle}
-                  customBattery={customBattery}
-                />
+                <div className="num text-[10px] text-ink-muted mt-0.5">
+                  {activeVehicle.battery} kWh · {activeVehicle.baseWh} Wh/km base
+                </div>
               </div>
+
+              <RangeDisplay
+                result={result}
+                vehicle={activeVehicle}
+                customBattery={customBattery}
+              />
             </div>
 
             {/* Conditions Summary */}
-            <div className="glass-card p-4">
-              <div className="text-[10px] text-white/25 uppercase tracking-widest font-semibold mb-3">
+            <div className="card p-4">
+              <div className="text-[10px] text-ink-muted uppercase tracking-widest font-semibold mb-3">
                 Active Conditions
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-1.5">
                 <ConditionPill label="Speed" value={`${speed} km/h`} />
                 <ConditionPill label="Temp" value={`${formatTemp(temperature)}°C`} />
                 <ConditionPill label="City" value={`${drivingMix.city}%`} />
@@ -340,8 +287,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Tip */}
-            <div className="text-center text-[11px] text-white/20 leading-relaxed px-4">
+            {/* Disclaimer */}
+            <div className="text-center text-[11px] text-ink-muted leading-relaxed px-4">
               All calculations are estimates based on coefficient modeling.
               Actual range varies with driving style and road conditions.
             </div>
@@ -350,9 +297,9 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 mt-16 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="text-xs text-white/20">
+      <footer className="border-t border-border mt-16 py-8">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 text-center">
+          <div className="text-xs text-ink-muted">
             EV Range Hero · Coefficient-based range modeling · {new Date().getFullYear()}
           </div>
         </div>
@@ -372,14 +319,12 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2.5">
-        <div className="w-6 h-6 rounded-md bg-white/8 flex items-center justify-center">
-          <Icon size={13} className="text-white/50" />
-        </div>
-        <h3 className="text-sm font-semibold text-white/70">{title}</h3>
+      <div className="flex items-center gap-2">
+        <Icon size={14} className="text-ink-tertiary" />
+        <h3 className="text-sm font-semibold text-ink-secondary">{title}</h3>
       </div>
       {badge && (
-        <span className="text-[10px] text-white/30 bg-white/5 border border-white/8 px-2 py-0.5 rounded-full font-medium">
+        <span className="text-[10px] text-ink-tertiary bg-surface border border-border px-2 py-0.5 rounded-full font-medium">
           {badge}
         </span>
       )}
@@ -389,9 +334,9 @@ function SectionHeader({
 
 function ConditionPill({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between px-2.5 py-1.5 bg-white/3 rounded-lg border border-white/6">
-      <span className="text-[10px] text-white/30 font-medium">{label}</span>
-      <span className="text-[10px] text-white/70 font-semibold">{value}</span>
+    <div className="flex items-center justify-between px-2.5 py-1.5 bg-surface rounded-lg">
+      <span className="text-[10px] text-ink-muted font-medium">{label}</span>
+      <span className="num text-[10px] text-ink-secondary font-semibold">{value}</span>
     </div>
   )
 }

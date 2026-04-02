@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,18 +8,33 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
-        glass: 'rgba(255, 255, 255, 0.05)',
-      },
-      backdropBlur: {
-        xs: '2px',
+        surface: {
+          DEFAULT: '#F6F5F0',
+          card: '#FFFFFF',
+        },
+        border: {
+          DEFAULT: '#E5E2DA',
+          hover: '#D0CCC3',
+        },
+        ink: {
+          DEFAULT: '#1C1C1C',
+          secondary: '#5C5950',
+          tertiary: '#9B978E',
+          muted: '#C4C0B8',
+        },
+        accent: {
+          DEFAULT: '#0F766E',
+          light: '#E6F5F2',
+          mid: '#99D5CC',
+        },
       },
       animation: {
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'fade-in': 'fadeIn 0.3s ease-in-out',
-        'slide-up': 'slideUp 0.4s ease-out',
+        'fade-in': 'fadeIn 0.25s ease-out',
+        'slide-up': 'slideUp 0.35s ease-out',
       },
       keyframes: {
         fadeIn: {
@@ -28,7 +42,7 @@ module.exports = {
           '100%': { opacity: '1' },
         },
         slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '0%': { transform: 'translateY(8px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
       },

@@ -14,39 +14,39 @@ const SEGMENTS = [
     label: 'City',
     sublabel: 'Regen braking',
     icon: Building2,
-    color: 'from-emerald-500 to-teal-500',
-    bgColor: 'bg-emerald-500/20',
-    textColor: 'text-emerald-400',
-    borderColor: 'border-emerald-500/30',
-    barColor: 'bg-gradient-to-r from-emerald-500 to-teal-400',
+    color: '#0F766E',
+    barColor: 'bg-accent',
+    textColor: 'text-accent',
+    bgColor: 'bg-accent-light',
+    borderColor: 'border-accent/20',
     badge: '-15%',
-    badgeColor: 'text-emerald-400 bg-emerald-400/10',
+    badgeStyle: 'text-accent bg-accent-light',
   },
   {
     key: 'highway' as const,
     label: 'Highway',
     sublabel: 'Aero drag',
     icon: Milestone,
-    color: 'from-blue-500 to-indigo-500',
-    bgColor: 'bg-blue-500/20',
-    textColor: 'text-blue-400',
-    borderColor: 'border-blue-500/30',
-    barColor: 'bg-gradient-to-r from-blue-500 to-indigo-400',
+    color: '#6366F1',
+    barColor: 'bg-indigo-500',
+    textColor: 'text-indigo-600',
+    bgColor: 'bg-indigo-50',
+    borderColor: 'border-indigo-200',
     badge: '+25%',
-    badgeColor: 'text-orange-400 bg-orange-400/10',
+    badgeStyle: 'text-amber-700 bg-amber-50',
   },
   {
     key: 'rough' as const,
     label: 'Rough Road',
     sublabel: 'Resistance',
     icon: Mountain,
-    color: 'from-amber-500 to-orange-500',
-    bgColor: 'bg-amber-500/20',
-    textColor: 'text-amber-400',
-    borderColor: 'border-amber-500/30',
-    barColor: 'bg-gradient-to-r from-amber-500 to-orange-400',
+    color: '#D97706',
+    barColor: 'bg-amber-500',
+    textColor: 'text-amber-600',
+    bgColor: 'bg-amber-50',
+    borderColor: 'border-amber-200',
     badge: '+10%',
-    badgeColor: 'text-red-400 bg-red-400/10',
+    badgeStyle: 'text-red-600 bg-red-50',
   },
 ]
 
@@ -85,17 +85,17 @@ export default function DrivingMixControl({ mix, onChange }: Props) {
   return (
     <div className="space-y-4">
       {/* Visual bar */}
-      <div className="h-3 rounded-full overflow-hidden flex gap-0.5">
+      <div className="h-2.5 rounded-full overflow-hidden flex gap-0.5 bg-surface">
         <div
-          className="bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-200 rounded-l-full"
+          className="bg-accent transition-all duration-200 rounded-l-full"
           style={{ width: `${mix.city}%` }}
         />
         <div
-          className="bg-gradient-to-r from-blue-500 to-indigo-400 transition-all duration-200"
+          className="bg-indigo-500 transition-all duration-200"
           style={{ width: `${mix.highway}%` }}
         />
         <div
-          className="bg-gradient-to-r from-amber-500 to-orange-400 transition-all duration-200 rounded-r-full"
+          className="bg-amber-500 transition-all duration-200 rounded-r-full"
           style={{ width: `${mix.rough}%` }}
         />
       </div>
@@ -105,18 +105,18 @@ export default function DrivingMixControl({ mix, onChange }: Props) {
         {SEGMENTS.map((seg) => {
           const Icon = seg.icon
           return (
-            <div key={seg.key} className={`p-3 rounded-xl border ${seg.borderColor} ${seg.bgColor}/30`}>
+            <div key={seg.key} className={`p-3 rounded-xl border ${seg.borderColor} ${seg.bgColor}`}>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Icon size={14} className={seg.textColor} />
-                  <span className="text-sm font-medium text-white/80">{seg.label}</span>
-                  <span className="text-xs text-white/30">{seg.sublabel}</span>
+                  <span className="text-sm font-medium text-ink-secondary">{seg.label}</span>
+                  <span className="text-xs text-ink-muted">{seg.sublabel}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${seg.badgeColor}`}>
+                  <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${seg.badgeStyle}`}>
                     {seg.badge}
                   </span>
-                  <span className={`text-base font-bold tabular-nums ${seg.textColor}`}>
+                  <span className={`num text-sm font-bold ${seg.textColor}`}>
                     {mix[seg.key]}%
                   </span>
                 </div>
@@ -130,7 +130,7 @@ export default function DrivingMixControl({ mix, onChange }: Props) {
                 onChange={(e) => handleChange(seg.key, Number(e.target.value))}
                 className="slider-track w-full"
                 style={{
-                  background: `linear-gradient(to right, var(--tw-gradient-from, #10b981) ${mix[seg.key]}%, rgba(255,255,255,0.08) ${mix[seg.key]}%)`,
+                  background: `linear-gradient(to right, ${seg.color} ${mix[seg.key]}%, #E5E2DA ${mix[seg.key]}%)`,
                 }}
               />
             </div>
@@ -141,10 +141,10 @@ export default function DrivingMixControl({ mix, onChange }: Props) {
       {/* Total indicator */}
       <div
         className={`text-center text-xs font-medium transition-colors ${
-          total === 100 ? 'text-white/30' : 'text-red-400'
+          total === 100 ? 'text-ink-muted' : 'text-red-500'
         }`}
       >
-        {total === 100 ? 'Total: 100% ✓' : `Total: ${total}% — must equal 100%`}
+        {total === 100 ? 'Total: 100%' : `Total: ${total}% — must equal 100%`}
       </div>
     </div>
   )

@@ -18,19 +18,17 @@ function ToggleSwitch({
   sublabel,
   checked,
   onChange,
-  activeColor = 'blue',
 }: {
   label: string
   sublabel?: string
   checked: boolean
   onChange: (v: boolean) => void
-  activeColor?: string
 }) {
   return (
     <div className="flex items-center justify-between">
       <div>
-        <div className="text-sm font-medium text-white/70">{label}</div>
-        {sublabel && <div className="text-xs text-white/30">{sublabel}</div>}
+        <div className="text-sm font-medium text-ink-secondary">{label}</div>
+        {sublabel && <div className="text-xs text-ink-tertiary">{sublabel}</div>}
       </div>
       <label className="toggle-switch shrink-0">
         <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
@@ -53,16 +51,16 @@ function SegmentedControl<T extends string>({
 }) {
   return (
     <div className="space-y-2">
-      <div className="text-sm font-medium text-white/70">{label}</div>
-      <div className="flex gap-1.5 p-1 bg-white/4 rounded-lg border border-white/8">
+      <div className="text-sm font-medium text-ink-secondary">{label}</div>
+      <div className="flex gap-1 p-1 bg-surface rounded-xl border border-border">
         {options.map((opt) => (
           <button
             key={opt.value}
             onClick={() => onChange(opt.value)}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-md text-xs font-semibold transition-all duration-200 ${
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-semibold transition-all duration-150 ${
               value === opt.value
-                ? 'bg-white/15 text-white shadow-sm'
-                : 'text-white/35 hover:text-white/60 hover:bg-white/5'
+                ? 'bg-white text-ink shadow-sm border border-border'
+                : 'text-ink-tertiary hover:text-ink-secondary border border-transparent'
             }`}
           >
             {opt.icon}
@@ -84,7 +82,7 @@ export default function FactorControls({
   onExtraLoad,
   onRimSize,
 }: Props) {
-  const loadPct = ((extraLoad - 0) / (300 - 0)) * 100
+  const loadPct = (extraLoad / 300) * 100
 
   return (
     <div className="space-y-5">
@@ -96,7 +94,7 @@ export default function FactorControls({
         onChange={onClimateControl}
       />
 
-      <div className="border-t border-white/5" />
+      <div className="border-t border-border" />
 
       {/* Wind */}
       <SegmentedControl
@@ -110,18 +108,18 @@ export default function FactorControls({
         ]}
       />
 
-      <div className="border-t border-white/5" />
+      <div className="border-t border-border" />
 
       {/* Extra Load */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Users size={14} className="text-white/40" />
-            <span className="text-sm font-medium text-white/70">Extra Load</span>
+            <Users size={14} className="text-ink-tertiary" />
+            <span className="text-sm font-medium text-ink-secondary">Extra Load</span>
           </div>
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-bold text-white tabular-nums">{extraLoad}</span>
-            <span className="text-xs text-white/40 font-medium">kg</span>
+            <span className="num text-lg font-semibold text-ink">{extraLoad}</span>
+            <span className="text-xs text-ink-tertiary font-medium">kg</span>
           </div>
         </div>
         <input
@@ -133,22 +131,22 @@ export default function FactorControls({
           onChange={(e) => onExtraLoad(Number(e.target.value))}
           className="slider-track w-full"
           style={{
-            background: `linear-gradient(to right, #8b5cf6 ${loadPct}%, rgba(255,255,255,0.1) ${loadPct}%)`,
+            background: `linear-gradient(to right, #6366F1 ${loadPct}%, #E5E2DA ${loadPct}%)`,
           }}
         />
         <div className="flex justify-between">
-          <span className="text-[10px] text-white/25">0 kg (empty)</span>
-          <span className="text-[10px] text-white/25">300 kg (full load)</span>
+          <span className="text-[10px] text-ink-muted">0 kg (empty)</span>
+          <span className="text-[10px] text-ink-muted">300 kg (full load)</span>
         </div>
       </div>
 
-      <div className="border-t border-white/5" />
+      <div className="border-t border-border" />
 
       {/* Rim Size */}
       <div className="space-y-2">
         <div className="flex items-center gap-2 mb-2">
-          <CircleDot size={14} className="text-white/40" />
-          <span className="text-sm font-medium text-white/70">Rim Size</span>
+          <CircleDot size={14} className="text-ink-tertiary" />
+          <span className="text-sm font-medium text-ink-secondary">Rim Size</span>
         </div>
         <div className="grid grid-cols-2 gap-2">
           {([
@@ -158,13 +156,13 @@ export default function FactorControls({
             <button
               key={opt.size}
               onClick={() => onRimSize(opt.size)}
-              className={`p-3 rounded-xl border text-center transition-all duration-200 ${
+              className={`p-3 rounded-xl border text-center transition-all duration-150 ${
                 rimSize === opt.size
-                  ? 'border-blue-500/40 bg-blue-500/10 text-blue-300'
-                  : 'border-white/8 bg-white/3 text-white/40 hover:border-white/15 hover:text-white/60'
+                  ? 'border-accent bg-accent-light text-accent'
+                  : 'border-border bg-white text-ink-tertiary hover:border-border-hover hover:text-ink-secondary'
               }`}
             >
-              <div className="text-lg font-bold">{opt.label}</div>
+              <div className="num text-lg font-bold">{opt.label}</div>
               <div className="text-[10px] font-medium mt-0.5 opacity-70">{opt.sub}</div>
             </button>
           ))}
