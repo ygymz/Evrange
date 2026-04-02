@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Thermometer,
   Gauge,
@@ -17,8 +17,34 @@ import RangeDisplay from '@/components/RangeDisplay'
 import FactorControls from '@/components/FactorControls'
 
 const DEFAULT_MIX: DrivingMix = { city: 100, highway: 0, rough: 0 }
+const STORAGE_KEY = 'ev-range-hero-state'
+
+interface PersistedState {
+  vehicleId: string
+  customBattery: number
+  customBaseWh: number
+  speed: number
+  temperature: number
+  drivingMix: DrivingMix
+  climateControl: boolean
+  windDirection: 'headwind' | 'tailwind' | 'none'
+  extraLoad: number
+  rimSize: '18' | '20'
+}
+
+function loadState(): Partial<PersistedState> {
+  if (typeof window === 'undefined') return {}
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) : {}
+  } catch {
+    return {}
+  }
+}
 
 export default function Home() {
+  const [initialized, setInitialized] = useState(false)
+
   // Vehicle
   const [vehicle, setVehicle] = useState<Vehicle>(VEHICLES[0])
   const [customBattery, setCustomBattery] = useState(75)
@@ -39,6 +65,48 @@ export default function Home() {
 
   // Accordion sections on mobile
   const [openSection, setOpenSection] = useState<string | null>('primary')
+
+  // Hydrate from localStorage on mount
+  useEffect(() => {
+    const saved = loadState()
+    if (saved.vehicleId) {
+      const found = VEHICLES.find((v) => v.id === saved.vehicleId)
+      if (found) setVehicle(found)
+    }
+    if (saved.customBattery !== undefined) setCustomBattery(saved.customBattery)
+    if (saved.customBaseWh !== undefined) setCustomBaseWh(saved.customBaseWh)
+    if (saved.speed !== undefined) setSpeed(saved.speed)
+    if (saved.temperature !== undefined) setTemperature(saved.temperature)
+    if (saved.drivingMix) setDrivingMix(saved.drivingMix)
+    if (saved.climateControl !== undefined) setClimateControl(saved.climateControl)
+    if (saved.windDirection) setWindDirection(saved.windDirection)
+    if (saved.extraLoad !== undefined) setExtraLoad(saved.extraLoad)
+    if (saved.rimSize) setRimSize(saved.rimSize)
+    setInitialized(true)
+  }, [])
+
+  // Persist state to localStorage
+  const saveState = useCallback(() => {
+    const state: PersistedState = {
+      vehicleId: vehicle.id,
+      customBattery,
+      customBaseWh,
+      speed,
+      temperature,
+      drivingMix,
+      climateControl,
+      windDirection,
+      extraLoad,
+      rimSize,
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+    } catch { /* quota exceeded — ignore */ }
+  }, [vehicle, customBattery, customBaseWh, speed, temperature, drivingMix, climateControl, windDirection, extraLoad, rimSize])
+
+  useEffect(() => {
+    if (initialized) saveState()
+  }, [initialized, saveState])
 
   const activeVehicle = useMemo<Vehicle>(() => {
     if (vehicle.custom) {
@@ -73,6 +141,7 @@ export default function Home() {
     setWindDirection('none')
     setExtraLoad(0)
     setRimSize('18')
+    try { localStorage.removeItem(STORAGE_KEY) } catch { /* ignore */ }
   }
 
   const formatTemp = (v: number) => (v >= 0 ? `+${v}` : `${v}`)

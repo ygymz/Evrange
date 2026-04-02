@@ -110,6 +110,7 @@ export default function VehicleSelector({
               max={200}
               value={customBattery}
               onChange={(e) => onCustomBattery(Number(e.target.value))}
+              onBlur={() => onCustomBattery(Math.max(10, Math.min(200, customBattery)))}
               className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500/50 focus:bg-white/8 transition-all"
             />
           </div>
@@ -123,6 +124,7 @@ export default function VehicleSelector({
               max={400}
               value={customBaseWh}
               onChange={(e) => onCustomBaseWh(Number(e.target.value))}
+              onBlur={() => onCustomBaseWh(Math.max(80, Math.min(400, customBaseWh)))}
               className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500/50 focus:bg-white/8 transition-all"
             />
           </div>

@@ -70,11 +70,12 @@ export default function DrivingMixControl({ mix, onChange }: Props) {
       others.forEach((k) => {
         updated[k] = Math.round((mix[k] / currentOtherTotal) * remaining)
       })
-      // Fix rounding drift
+      // Fix rounding drift — apply to the largest other segment
       const newTotal = updated.city + updated.highway + updated.rough
       if (newTotal !== 100) {
         const diff = 100 - newTotal
-        updated[others[1]] = updated[others[1]] + diff
+        const target = updated[others[0]] >= updated[others[1]] ? others[0] : others[1]
+        updated[target] = updated[target] + diff
       }
     }
 
