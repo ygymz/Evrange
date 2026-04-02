@@ -2,6 +2,7 @@
 
 import { Building2, Milestone, Mountain } from 'lucide-react'
 import { DrivingMix } from '@/lib/calculator'
+import { useTranslation } from '@/lib/i18n'
 
 interface Props {
   mix: DrivingMix
@@ -51,6 +52,7 @@ const SEGMENTS = [
 ]
 
 export default function DrivingMixControl({ mix, onChange }: Props) {
+  const { t } = useTranslation()
   const total = mix.city + mix.highway + mix.rough
 
   const handleChange = (key: keyof DrivingMix, rawValue: number) => {
@@ -109,12 +111,12 @@ export default function DrivingMixControl({ mix, onChange }: Props) {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Icon size={14} className={seg.textColor} />
-                  <span className="text-sm font-medium text-ink-secondary">{seg.label}</span>
-                  <span className="text-xs text-ink-muted">{seg.sublabel}</span>
+                  <span className="text-sm font-medium text-ink-secondary">{t(`mix.${seg.key}`)}</span>
+                  <span className="text-xs text-ink-muted">{t(`mix.${seg.key}.sub`)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${seg.badgeStyle}`}>
-                    {seg.badge}
+                    {t(`mix.${seg.key}.badge`)}
                   </span>
                   <span className={`num text-sm font-bold ${seg.textColor}`}>
                     {mix[seg.key]}%
@@ -144,7 +146,7 @@ export default function DrivingMixControl({ mix, onChange }: Props) {
           total === 100 ? 'text-ink-muted' : 'text-red-500'
         }`}
       >
-        {total === 100 ? 'Total: 100%' : `Total: ${total}% — must equal 100%`}
+        {total === 100 ? t('mix.total.ok') : t('mix.total.error', { val: total })}
       </div>
     </div>
   )

@@ -1,6 +1,7 @@
 'use client'
 
 import { Users, CircleDot } from 'lucide-react'
+import { useTranslation } from '@/lib/i18n'
 
 interface Props {
   climateControl: boolean
@@ -44,14 +45,15 @@ export default function FactorControls({
   onExtraLoad,
   onRimSize,
 }: Props) {
+  const { t } = useTranslation()
   const loadPct = (extraLoad / 300) * 100
 
   return (
     <div className="space-y-5">
       {/* Climate Control */}
       <ToggleSwitch
-        label="Climate Control"
-        sublabel={climateControl ? 'AC/Heat active (~0.8–3 kW)' : 'Off'}
+        label={t('factor.climate')}
+        sublabel={climateControl ? t('factor.climate.on') : t('factor.climate.off')}
         checked={climateControl}
         onChange={onClimateControl}
       />
@@ -63,7 +65,7 @@ export default function FactorControls({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Users size={14} className="text-ink-tertiary" />
-            <span className="text-sm font-medium text-ink-secondary">Extra Load</span>
+            <span className="text-sm font-medium text-ink-secondary">{t('factor.load')}</span>
           </div>
           <div className="flex items-baseline gap-1">
             <span className="num text-lg font-semibold text-ink">{extraLoad}</span>
@@ -83,8 +85,8 @@ export default function FactorControls({
           }}
         />
         <div className="flex justify-between">
-          <span className="text-[10px] text-ink-muted">0 kg (empty)</span>
-          <span className="text-[10px] text-ink-muted">300 kg (full load)</span>
+          <span className="text-[10px] text-ink-muted">{t('factor.load.empty')}</span>
+          <span className="text-[10px] text-ink-muted">{t('factor.load.full')}</span>
         </div>
       </div>
 
@@ -94,13 +96,13 @@ export default function FactorControls({
       <div className="space-y-2">
         <div className="flex items-center gap-2 mb-2">
           <CircleDot size={14} className="text-ink-tertiary" />
-          <span className="text-sm font-medium text-ink-secondary">Rim Size</span>
+          <span className="text-sm font-medium text-ink-secondary">{t('factor.rims')}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           {([
-            { size: '18' as const, label: '18"', sub: 'Efficient' },
-            { size: '19' as const, label: '19"', sub: 'Standard' },
-            { size: '20' as const, label: '20"', sub: 'Performance' },
+            { size: '18' as const, label: '18"', sub: t('factor.rims.18') },
+            { size: '19' as const, label: '19"', sub: t('factor.rims.19') },
+            { size: '20' as const, label: '20"', sub: t('factor.rims.20') },
           ]).map((opt) => (
             <button
               key={opt.size}

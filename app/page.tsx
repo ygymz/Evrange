@@ -7,6 +7,7 @@ import {
   Zap,
   SlidersHorizontal,
   RotateCcw,
+  Languages,
 } from 'lucide-react'
 import { VEHICLES, Vehicle, DrivingMix, calculateRange } from '@/lib/calculator'
 import VehicleSelector from '@/components/VehicleSelector'
@@ -14,6 +15,7 @@ import SliderControl from '@/components/SliderControl'
 import DrivingMixControl from '@/components/DrivingMixControl'
 import RangeDisplay from '@/components/RangeDisplay'
 import FactorControls from '@/components/FactorControls'
+import { useTranslation } from '@/lib/i18n'
 
 const DEFAULT_MIX: DrivingMix = { city: 100, highway: 0, rough: 0 }
 const STORAGE_KEY = 'ev-range-hero-state'
@@ -39,6 +41,7 @@ function loadState(): Partial<PersistedState> {
 }
 
 export default function Home() {
+  const { t, language, setLanguage } = useTranslation()
   const [initialized, setInitialized] = useState(false)
 
   // Vehicle
@@ -129,20 +132,29 @@ export default function Home() {
               <Zap size={16} className="text-white" strokeWidth={2.5} />
             </div>
             <div>
-              <div className="text-base font-bold text-ink leading-none tracking-tight">EV Range Hero</div>
+              <div className="text-base font-bold text-ink leading-none tracking-tight">{t('app.title')}</div>
               <div className="text-[10px] text-ink-muted font-medium tracking-wider uppercase mt-0.5">
-                Real-World Calculator
+                {t('app.subtitle')}
               </div>
             </div>
           </div>
 
-          <button
-            onClick={handleReset}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-ink-tertiary hover:text-ink-secondary hover:border-border-hover hover:bg-white transition-all text-xs font-medium"
-          >
-            <RotateCcw size={12} />
-            Reset
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setLanguage(language === 'en' ? 'tr' : 'en')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-ink-tertiary hover:text-ink-secondary hover:border-border-hover hover:bg-white transition-all text-xs font-medium"
+            >
+              <Languages size={12} />
+              {language.toUpperCase()}
+            </button>
+            <button
+              onClick={handleReset}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-ink-tertiary hover:text-ink-secondary hover:border-border-hover hover:bg-white transition-all text-xs font-medium"
+            >
+              <RotateCcw size={12} />
+              {t('app.reset')}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -155,7 +167,7 @@ export default function Home() {
 
             {/* Vehicle Selector */}
             <div className="card p-5 space-y-4">
-              <SectionHeader icon={Zap} title="Vehicle" />
+              <SectionHeader icon={Zap} title={t('section.vehicle')} />
               <VehicleSelector
                 selected={vehicle}
                 onSelect={setVehicle}
@@ -164,9 +176,9 @@ export default function Home() {
 
             {/* Primary Sliders */}
             <div className="card p-5 space-y-6">
-              <SectionHeader icon={Gauge} title="Speed & Temperature" />
+              <SectionHeader icon={Gauge} title={t('section.speedTemp')} />
               <SliderControl
-                label="Speed"
+                label={t('term.speed')}
                 value={speed}
                 min={30}
                 max={180}
@@ -177,7 +189,7 @@ export default function Home() {
               />
               <div className="border-t border-border" />
               <SliderControl
-                label="Temperature"
+                label={t('term.temp')}
                 value={temperature}
                 min={-20}
                 max={45}
@@ -193,15 +205,15 @@ export default function Home() {
             <div className="card p-5 space-y-4">
               <SectionHeader
                 icon={SlidersHorizontal}
-                title="Driving Mix"
-                badge="Must total 100%"
+                title={t('section.drivingMix')}
+                badge={t('badge.total100')}
               />
               <DrivingMixControl mix={drivingMix} onChange={setDrivingMix} />
             </div>
 
             {/* Environment & Load */}
             <div className="card p-5 space-y-4">
-              <SectionHeader icon={Thermometer} title="Environment & Load" />
+              <SectionHeader icon={Thermometer} title={t('section.envLoad')} />
               <FactorControls
                 climateControl={climateControl}
                 extraLoad={extraLoad}
@@ -235,23 +247,22 @@ export default function Home() {
             {/* Conditions Summary */}
             <div className="card p-4">
               <div className="text-[10px] text-ink-muted uppercase tracking-widest font-semibold mb-3">
-                Active Conditions
+                {t('sidebar.activeConditions')}
               </div>
               <div className="grid grid-cols-2 gap-1.5">
-                <ConditionPill label="Speed" value={`${speed} km/h`} />
-                <ConditionPill label="Temp" value={`${formatTemp(temperature)}°C`} />
-                <ConditionPill label="City" value={`${drivingMix.city}%`} />
-                <ConditionPill label="Highway" value={`${drivingMix.highway}%`} />
-                <ConditionPill label="Load" value={`+${extraLoad} kg`} />
-                <ConditionPill label="Climate" value={climateControl ? 'On' : 'Off'} />
-                <ConditionPill label="Rims" value={`${rimSize}"`} />
+                <ConditionPill label={t('term.speed')} value={`${speed} km/h`} />
+                <ConditionPill label={t('term.temp')} value={`${formatTemp(temperature)}°C`} />
+                <ConditionPill label={t('term.city')} value={`${drivingMix.city}%`} />
+                <ConditionPill label={t('term.highway')} value={`${drivingMix.highway}%`} />
+                <ConditionPill label={t('term.load')} value={`+${extraLoad} kg`} />
+                <ConditionPill label={t('term.climate')} value={climateControl ? t('term.on') : t('term.off')} />
+                <ConditionPill label={t('term.rims')} value={`${rimSize}"`} />
               </div>
             </div>
 
             {/* Disclaimer */}
             <div className="text-center text-[11px] text-ink-muted leading-relaxed px-4">
-              All calculations are estimates based on physics-based aerodynamic
-              and resistance modeling. Actual range varies with driving style and road conditions.
+              {t('footer.disclaimer')}
             </div>
           </div>
         </div>
@@ -261,7 +272,7 @@ export default function Home() {
       <footer className="border-t border-border mt-16 py-8">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 text-center">
           <div className="text-xs text-ink-muted">
-            EV Range Hero · Physics-based range modeling · {new Date().getFullYear()}
+            {t('footer.credits')} · {new Date().getFullYear()}
           </div>
         </div>
       </footer>

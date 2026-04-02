@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { CalculatorResult, Vehicle } from '@/lib/calculator'
+import { useTranslation } from '@/lib/i18n'
 
 interface Props {
   result: CalculatorResult
@@ -54,6 +55,7 @@ function getRangeArc(ratio: number): string {
 }
 
 export default function RangeDisplay({ result, vehicle }: Props) {
+  const { t } = useTranslation()
   const battery = vehicle.battery
   const maxRange = Math.round((battery * 1000) / vehicle.baseWh)
   const ratio = result.range / maxRange
@@ -100,9 +102,9 @@ export default function RangeDisplay({ result, vehicle }: Props) {
 
       {/* Ideal range reference */}
       <div className="text-center">
-        <div className="text-[11px] text-ink-tertiary uppercase tracking-wider font-medium">Estimated Range</div>
+        <div className="text-[11px] text-ink-tertiary uppercase tracking-wider font-medium">{t('range.estimated')}</div>
         <div className="text-sm text-ink-secondary mt-0.5">
-          Ideal: <span className="num font-semibold text-ink">{maxRange} km</span>
+          {t('range.ideal')}: <span className="num font-semibold text-ink">{maxRange} km</span>
         </div>
       </div>
 
@@ -115,15 +117,15 @@ export default function RangeDisplay({ result, vehicle }: Props) {
 
         <div className="p-3 rounded-xl bg-surface border border-border text-center">
           <div className="num text-lg font-bold text-ink">{result.batteryHealthPct}%</div>
-          <div className="text-[10px] text-ink-muted mt-0.5 font-medium">Utilization</div>
+          <div className="text-[10px] text-ink-muted mt-0.5 font-medium">{t('range.utilization')}</div>
         </div>
 
         <div className="p-3 rounded-xl bg-surface border border-border text-center">
           <div className={`inline-flex items-center gap-1 border rounded-full px-2 py-0.5 ${effConfig.bg} ${effConfig.border}`}>
             <span className={`w-1.5 h-1.5 rounded-full ${effConfig.dot}`} />
-            <span className={`text-[10px] font-bold ${effConfig.color}`}>{result.efficiencyLabel}</span>
+            <span className={`text-[10px] font-bold ${effConfig.color}`}>{t(`rating.${result.efficiencyLabel}`)}</span>
           </div>
-          <div className="text-[10px] text-ink-muted mt-1 font-medium">Rating</div>
+          <div className="text-[10px] text-ink-muted mt-1 font-medium">{t('range.rating')}</div>
         </div>
       </div>
 
