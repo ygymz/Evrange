@@ -26,9 +26,8 @@ interface PersistedState {
   temperature: number
   drivingMix: DrivingMix
   climateControl: boolean
-  windDirection: 'headwind' | 'tailwind' | 'none'
   extraLoad: number
-  rimSize: '18' | '20'
+  rimSize: '18' | '19' | '20'
 }
 
 function loadState(): Partial<PersistedState> {
@@ -58,9 +57,8 @@ export default function Home() {
 
   // Environmental factors
   const [climateControl, setClimateControl] = useState(false)
-  const [windDirection, setWindDirection] = useState<'headwind' | 'tailwind' | 'none'>('none')
   const [extraLoad, setExtraLoad] = useState(0)
-  const [rimSize, setRimSize] = useState<'18' | '20'>('18')
+  const [rimSize, setRimSize] = useState<'18' | '19' | '20'>('19')
 
   // Hydrate from localStorage on mount
   useEffect(() => {
@@ -75,7 +73,6 @@ export default function Home() {
     if (saved.temperature !== undefined) setTemperature(saved.temperature)
     if (saved.drivingMix) setDrivingMix(saved.drivingMix)
     if (saved.climateControl !== undefined) setClimateControl(saved.climateControl)
-    if (saved.windDirection) setWindDirection(saved.windDirection)
     if (saved.extraLoad !== undefined) setExtraLoad(saved.extraLoad)
     if (saved.rimSize) setRimSize(saved.rimSize)
     setInitialized(true)
@@ -91,14 +88,13 @@ export default function Home() {
       temperature,
       drivingMix,
       climateControl,
-      windDirection,
       extraLoad,
       rimSize,
     }
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
     } catch { /* quota exceeded — ignore */ }
-  }, [vehicle, customBattery, customBaseWh, speed, temperature, drivingMix, climateControl, windDirection, extraLoad, rimSize])
+  }, [vehicle, customBattery, customBaseWh, speed, temperature, drivingMix, climateControl, extraLoad, rimSize])
 
   useEffect(() => {
     if (initialized) saveState()
@@ -119,11 +115,10 @@ export default function Home() {
         temperature,
         drivingMix,
         climateControl,
-        windDirection,
         extraLoad,
         rimSize,
       }),
-    [activeVehicle, speed, temperature, drivingMix, climateControl, windDirection, extraLoad, rimSize],
+    [activeVehicle, speed, temperature, drivingMix, climateControl, extraLoad, rimSize],
   )
 
   const handleReset = () => {
@@ -134,9 +129,8 @@ export default function Home() {
     setTemperature(20)
     setDrivingMix(DEFAULT_MIX)
     setClimateControl(false)
-    setWindDirection('none')
     setExtraLoad(0)
-    setRimSize('18')
+    setRimSize('19')
     try { localStorage.removeItem(STORAGE_KEY) } catch { /* ignore */ }
   }
 
@@ -239,11 +233,9 @@ export default function Home() {
               <SectionHeader icon={Thermometer} title="Environment & Load" />
               <FactorControls
                 climateControl={climateControl}
-                windDirection={windDirection}
                 extraLoad={extraLoad}
                 rimSize={rimSize}
                 onClimateControl={setClimateControl}
-                onWindDirection={setWindDirection}
                 onExtraLoad={setExtraLoad}
                 onRimSize={setRimSize}
               />
@@ -280,7 +272,6 @@ export default function Home() {
                 <ConditionPill label="Temp" value={`${formatTemp(temperature)}°C`} />
                 <ConditionPill label="City" value={`${drivingMix.city}%`} />
                 <ConditionPill label="Highway" value={`${drivingMix.highway}%`} />
-                <ConditionPill label="Wind" value={windDirection === 'none' ? 'Calm' : windDirection} />
                 <ConditionPill label="Load" value={`+${extraLoad} kg`} />
                 <ConditionPill label="Climate" value={climateControl ? 'On' : 'Off'} />
                 <ConditionPill label="Rims" value={`${rimSize}"`} />

@@ -29,9 +29,8 @@ export interface CalculatorInputs {
   temperature: number   // °C
   drivingMix: DrivingMix
   climateControl: boolean
-  windDirection: 'headwind' | 'tailwind' | 'none'
   extraLoad: number     // kg
-  rimSize: '18' | '20'
+  rimSize: '18' | '19' | '20'
 }
 
 export interface CalculatorResult {
@@ -44,7 +43,6 @@ export interface CalculatorResult {
 // ── Physics Constants ───────────────────────────────────────────────────────
 const G = 9.81              // m/s²
 const RHO_REF = 1.225       // kg/m³ at 15 °C, sea level
-const WIND_SPEED = 4.17     // m/s (~15 km/h assumed wind)
 const PARASITIC_LOAD = 250  // W — always-on systems (BMS, 12V, infotainment, lights)
 const CITY_STOPS_PER_KM = 2 // average stop-start cycles per km in city driving
 
@@ -117,7 +115,6 @@ function modeConsumption(
   physics: PhysicsParams,
   totalMass: number,
   tempC: number,
-  windDirection: 'headwind' | 'tailwind' | 'none',
   pAux: number,
 ): number {
   const v = kmhToMs(vKmh)
@@ -125,13 +122,8 @@ function modeConsumption(
 
   const rho = airDensity(tempC)
 
-  // Wind adjusts effective velocity for drag only
-  let vDrag = v
-  if (windDirection === 'headwind') vDrag = v + WIND_SPEED
-  else if (windDirection === 'tailwind') vDrag = Math.max(0, v - WIND_SPEED)
-
   // Aerodynamic drag force
-  const Fd = 0.5 * rho * physics.frontalArea * physics.cd * vDrag * vDrag
+  const Fd = 0.5 * rho * physics.frontalArea * physics.cd * v * v
 
   // Rolling resistance force
   const Frr = physics.crr * totalMass * G
@@ -148,11 +140,12 @@ function modeConsumption(
 
 // ── Physics-Based Range ─────────────────────────────────────────────────────
 function calculateRangePhysics(inputs: CalculatorInputs): CalculatorResult {
-  const { vehicle, speed, temperature, drivingMix, climateControl, windDirection, extraLoad, rimSize } = inputs
+  const { vehicle, speed, temperature, drivingMix, climateControl, extraLoad, rimSize } = inputs
   const p = vehicle.physics!
 
-  // Effective Crr (rim size modifier)
-  const baseCrr = rimSize === '20' ? p.crr * 1.08 : p.crr
+  // Effective Crr (rim size modifier): 19" baseline, 18" slightly better, 20" worse
+  const rimFactor = rimSize === '20' ? 1.08 : rimSize === '18' ? 0.96 : 1.0
+  const baseCrr = p.crr * rimFactor
   const totalMass = p.mass + extraLoad
 
   // Auxiliary power: HVAC + always-on parasitic loads
@@ -164,7 +157,7 @@ function calculateRangePhysics(inputs: CalculatorInputs): CalculatorResult {
   // City: capped effective speed, base Crr, stop-start cycling with regen
   const citySpeed = Math.min(speed, 50)
   const cityPhysics = makePhysics(baseCrr)
-  let cityWh = modeConsumption(citySpeed, cityPhysics, totalMass, temperature, windDirection, pAux)
+  let cityWh = modeConsumption(citySpeed, cityPhysics, totalMass, temperature, pAux)
   // Stop-start acceleration energy: ½mv² per stop, partially recovered by regen
   const vCity = kmhToMs(citySpeed)
   const kineticPerStop = 0.5 * totalMass * vCity * vCity   // joules
@@ -174,12 +167,12 @@ function calculateRangePhysics(inputs: CalculatorInputs): CalculatorResult {
 
   // Highway: full speed, base Crr
   const highwayPhysics = makePhysics(baseCrr)
-  const highwayWh = modeConsumption(speed, highwayPhysics, totalMass, temperature, windDirection, pAux)
+  const highwayWh = modeConsumption(speed, highwayPhysics, totalMass, temperature, pAux)
 
   // Rough: reduced speed, higher Crr
   const roughSpeed = speed * 0.85
   const roughPhysics = makePhysics(baseCrr * 1.5)
-  const roughWh = modeConsumption(roughSpeed, roughPhysics, totalMass, temperature, windDirection, pAux)
+  const roughWh = modeConsumption(roughSpeed, roughPhysics, totalMass, temperature, pAux)
 
   // Weighted average
   const cityW = drivingMix.city / 100
@@ -212,7 +205,7 @@ function calculateRangePhysics(inputs: CalculatorInputs): CalculatorResult {
 
 // ── Legacy Coefficient Model (Custom Vehicles) ──────────────────────────────
 function calculateRangeLegacy(inputs: CalculatorInputs): CalculatorResult {
-  const { vehicle, speed, temperature, drivingMix, climateControl, windDirection, extraLoad, rimSize } = inputs
+  const { vehicle, speed, temperature, drivingMix, climateControl, extraLoad, rimSize } = inputs
 
   let consumption = vehicle.baseWh
 
@@ -246,15 +239,12 @@ function calculateRangeLegacy(inputs: CalculatorInputs): CalculatorResult {
 
   consumption *= mixFactor
 
-  // Wind
-  if (windDirection === 'headwind') consumption *= 1.10
-  else if (windDirection === 'tailwind') consumption *= 0.93
-
   // Load
   consumption += (extraLoad / 10) * 0.5
 
-  // Rim
+  // Rim: 19" baseline, 18" slightly better, 20" worse
   if (rimSize === '20') consumption *= 1.04
+  else if (rimSize === '18') consumption *= 0.97
 
   // Range
   const range = Math.round((vehicle.battery * 1000) / consumption)
