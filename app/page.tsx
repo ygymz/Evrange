@@ -153,14 +153,6 @@ export default function Home() {
           {/* LEFT COLUMN — Controls */}
           <div className="space-y-5">
 
-            {/* Section label */}
-            <div className="flex items-center gap-2.5">
-              <SlidersHorizontal size={13} className="text-ink-muted" />
-              <h2 className="text-[11px] font-semibold text-ink-muted uppercase tracking-widest">
-                Configure Your Journey
-              </h2>
-            </div>
-
             {/* Vehicle Selector */}
             <div className="card p-5 space-y-4">
               <SectionHeader icon={Zap} title="Vehicle" />
