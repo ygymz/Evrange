@@ -17,7 +17,7 @@ import RangeDisplay from '@/components/RangeDisplay'
 import FactorControls from '@/components/FactorControls'
 import { useTranslation } from '@/lib/i18n'
 
-const DEFAULT_MIX: DrivingMix = { city: 100, highway: 0, rough: 0 }
+const DEFAULT_MIX: DrivingMix = { city: 50, highway: 50, rough: 0 }
 const STORAGE_KEY = 'ev-range-hero-state'
 
 interface PersistedState {
