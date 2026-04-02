@@ -89,7 +89,7 @@ export default function FactorControls({
       {/* Climate Control */}
       <ToggleSwitch
         label="Climate Control"
-        sublabel={climateControl ? 'AC/Heat active (+22–35 Wh/km)' : 'Off'}
+        sublabel={climateControl ? 'AC/Heat active (~0.8–3 kW)' : 'Off'}
         checked={climateControl}
         onChange={onClimateControl}
       />

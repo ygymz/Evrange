@@ -289,8 +289,8 @@ export default function Home() {
 
             {/* Disclaimer */}
             <div className="text-center text-[11px] text-ink-muted leading-relaxed px-4">
-              All calculations are estimates based on coefficient modeling.
-              Actual range varies with driving style and road conditions.
+              All calculations are estimates based on physics-based aerodynamic
+              and resistance modeling. Actual range varies with driving style and road conditions.
             </div>
           </div>
         </div>
@@ -300,7 +300,7 @@ export default function Home() {
       <footer className="border-t border-border mt-16 py-8">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 text-center">
           <div className="text-xs text-ink-muted">
-            EV Range Hero · Coefficient-based range modeling · {new Date().getFullYear()}
+            EV Range Hero · Physics-based range modeling · {new Date().getFullYear()}
           </div>
         </div>
       </footer>

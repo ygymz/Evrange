@@ -19,7 +19,7 @@ const SEGMENTS = [
     textColor: 'text-accent',
     bgColor: 'bg-accent-light',
     borderColor: 'border-accent/20',
-    badge: '-15%',
+    badge: 'Regen',
     badgeStyle: 'text-accent bg-accent-light',
   },
   {
@@ -32,7 +32,7 @@ const SEGMENTS = [
     textColor: 'text-indigo-600',
     bgColor: 'bg-indigo-50',
     borderColor: 'border-indigo-200',
-    badge: '+25%',
+    badge: 'Aero',
     badgeStyle: 'text-amber-700 bg-amber-50',
   },
   {
@@ -45,7 +45,7 @@ const SEGMENTS = [
     textColor: 'text-amber-600',
     bgColor: 'bg-amber-50',
     borderColor: 'border-amber-200',
-    badge: '+10%',
+    badge: 'Resist.',
     badgeStyle: 'text-red-600 bg-red-50',
   },
 ]
