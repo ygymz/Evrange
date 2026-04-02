@@ -13,8 +13,7 @@ export interface Vehicle {
   name: string
   battery: number   // kWh
   baseWh: number    // Wh/km — display-only reference (WLTP-like)
-  custom?: boolean
-  physics?: PhysicsParams
+  physics: PhysicsParams
 }
 
 export interface DrivingMix {
@@ -84,13 +83,6 @@ export const VEHICLES: Vehicle[] = [
     baseWh: 165,
     physics: { mass: 1502, cd: 0.29, frontalArea: 2.19, crr: 0.010, drivetrainEff: 0.87, regenEff: 0.55, hasHeatPump: false },
   },
-  {
-    id: 'custom',
-    name: 'Custom Vehicle',
-    battery: 75.0,
-    baseWh: 160,
-    custom: true,
-  },
 ]
 
 // ── HVAC Auxiliary Power (watts) ────────────────────────────────────────────
@@ -141,7 +133,7 @@ function modeConsumption(
 // ── Physics-Based Range ─────────────────────────────────────────────────────
 function calculateRangePhysics(inputs: CalculatorInputs): CalculatorResult {
   const { vehicle, speed, temperature, drivingMix, climateControl, extraLoad, rimSize } = inputs
-  const p = vehicle.physics!
+  const p = vehicle.physics
 
   // Effective Crr (rim size modifier): 19" baseline, 18" slightly better, 20" worse
   const rimFactor = rimSize === '20' ? 1.08 : rimSize === '18' ? 0.96 : 1.0
@@ -203,72 +195,7 @@ function calculateRangePhysics(inputs: CalculatorInputs): CalculatorResult {
   }
 }
 
-// ── Legacy Coefficient Model (Custom Vehicles) ──────────────────────────────
-function calculateRangeLegacy(inputs: CalculatorInputs): CalculatorResult {
-  const { vehicle, speed, temperature, drivingMix, climateControl, extraLoad, rimSize } = inputs
-
-  let consumption = vehicle.baseWh
-
-  // Speed factor — aero drag scales roughly with v^1.9; normalize at 90 km/h
-  const speedFactor = Math.pow(speed / 90, 1.9)
-  consumption *= speedFactor
-
-  // Thermal factor
-  let thermalFactor = 1.0
-  if (temperature < 5) {
-    thermalFactor = 1 + (5 - temperature) * 0.015
-  } else if (temperature > 35) {
-    thermalFactor = 1 + (temperature - 35) * 0.005
-  }
-  consumption *= thermalFactor
-
-  // Climate control
-  if (climateControl) {
-    consumption += temperature < 5 ? 35 : 22
-  }
-
-  // Driving mix
-  const cityFactor    = 1.0 - 0.15
-  const highwayFactor = 1.0 + 0.25
-  const roughFactor   = 1.0 + 0.10
-
-  const mixFactor =
-    (drivingMix.city / 100) * cityFactor +
-    (drivingMix.highway / 100) * highwayFactor +
-    (drivingMix.rough / 100) * roughFactor
-
-  consumption *= mixFactor
-
-  // Load
-  consumption += (extraLoad / 10) * 0.5
-
-  // Rim: 19" baseline, 18" slightly better, 20" worse
-  if (rimSize === '20') consumption *= 1.04
-  else if (rimSize === '18') consumption *= 0.97
-
-  // Range
-  const range = Math.round((vehicle.battery * 1000) / consumption)
-
-  const theoreticalMax = Math.round((vehicle.battery * 1000) / vehicle.baseWh)
-  const batteryHealthPct = Math.min(100, Math.round((range / theoreticalMax) * 100))
-
-  const efficiencyLabel: CalculatorResult['efficiencyLabel'] =
-    consumption < 160 ? 'Excellent' :
-    consumption < 200 ? 'Good' :
-    consumption < 250 ? 'Fair' : 'Poor'
-
-  return {
-    range,
-    efficiency: Math.round(consumption),
-    batteryHealthPct,
-    efficiencyLabel,
-  }
-}
-
 // ── Public API ──────────────────────────────────────────────────────────────
 export function calculateRange(inputs: CalculatorInputs): CalculatorResult {
-  if (inputs.vehicle.physics) {
-    return calculateRangePhysics(inputs)
-  }
-  return calculateRangeLegacy(inputs)
+  return calculateRangePhysics(inputs)
 }

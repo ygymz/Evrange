@@ -6,7 +6,6 @@ import { CalculatorResult, Vehicle } from '@/lib/calculator'
 interface Props {
   result: CalculatorResult
   vehicle: Vehicle
-  customBattery: number
 }
 
 function AnimatedNumber({ value }: { value: number }) {
@@ -54,8 +53,8 @@ function getRangeArc(ratio: number): string {
   return '#B83B3B'
 }
 
-export default function RangeDisplay({ result, vehicle, customBattery }: Props) {
-  const battery = vehicle.custom ? customBattery : vehicle.battery
+export default function RangeDisplay({ result, vehicle }: Props) {
+  const battery = vehicle.battery
   const maxRange = Math.round((battery * 1000) / vehicle.baseWh)
   const ratio = result.range / maxRange
   const rangeColor = getRangeColor(ratio)

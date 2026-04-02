@@ -20,8 +20,6 @@ const STORAGE_KEY = 'ev-range-hero-state'
 
 interface PersistedState {
   vehicleId: string
-  customBattery: number
-  customBaseWh: number
   speed: number
   temperature: number
   drivingMix: DrivingMix
@@ -45,8 +43,6 @@ export default function Home() {
 
   // Vehicle
   const [vehicle, setVehicle] = useState<Vehicle>(VEHICLES[0])
-  const [customBattery, setCustomBattery] = useState(75)
-  const [customBaseWh, setCustomBaseWh] = useState(160)
 
   // Primary sliders
   const [speed, setSpeed] = useState(90)
@@ -67,8 +63,6 @@ export default function Home() {
       const found = VEHICLES.find((v) => v.id === saved.vehicleId)
       if (found) setVehicle(found)
     }
-    if (saved.customBattery !== undefined) setCustomBattery(saved.customBattery)
-    if (saved.customBaseWh !== undefined) setCustomBaseWh(saved.customBaseWh)
     if (saved.speed !== undefined) setSpeed(saved.speed)
     if (saved.temperature !== undefined) setTemperature(saved.temperature)
     if (saved.drivingMix) setDrivingMix(saved.drivingMix)
@@ -82,8 +76,6 @@ export default function Home() {
   const saveState = useCallback(() => {
     const state: PersistedState = {
       vehicleId: vehicle.id,
-      customBattery,
-      customBaseWh,
       speed,
       temperature,
       drivingMix,
@@ -94,23 +86,16 @@ export default function Home() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
     } catch { /* quota exceeded — ignore */ }
-  }, [vehicle, customBattery, customBaseWh, speed, temperature, drivingMix, climateControl, extraLoad, rimSize])
+  }, [vehicle, speed, temperature, drivingMix, climateControl, extraLoad, rimSize])
 
   useEffect(() => {
     if (initialized) saveState()
   }, [initialized, saveState])
 
-  const activeVehicle = useMemo<Vehicle>(() => {
-    if (vehicle.custom) {
-      return { ...vehicle, battery: customBattery, baseWh: customBaseWh }
-    }
-    return vehicle
-  }, [vehicle, customBattery, customBaseWh])
-
   const result = useMemo(
     () =>
       calculateRange({
-        vehicle: activeVehicle,
+        vehicle,
         speed,
         temperature,
         drivingMix,
@@ -118,13 +103,11 @@ export default function Home() {
         extraLoad,
         rimSize,
       }),
-    [activeVehicle, speed, temperature, drivingMix, climateControl, extraLoad, rimSize],
+    [vehicle, speed, temperature, drivingMix, climateControl, extraLoad, rimSize],
   )
 
   const handleReset = () => {
     setVehicle(VEHICLES[0])
-    setCustomBattery(75)
-    setCustomBaseWh(160)
     setSpeed(90)
     setTemperature(20)
     setDrivingMix(DEFAULT_MIX)
@@ -183,11 +166,7 @@ export default function Home() {
               <SectionHeader icon={Zap} title="Vehicle" />
               <VehicleSelector
                 selected={vehicle}
-                customBattery={customBattery}
-                customBaseWh={customBaseWh}
                 onSelect={setVehicle}
-                onCustomBattery={setCustomBattery}
-                onCustomBaseWh={setCustomBaseWh}
               />
             </div>
 
@@ -248,17 +227,16 @@ export default function Home() {
             <div className="card-strong p-7">
               <div className="text-center mb-5">
                 <div className="text-[11px] font-semibold text-ink-tertiary uppercase tracking-widest">
-                  {activeVehicle.name}
+                  {vehicle.name}
                 </div>
                 <div className="num text-[10px] text-ink-muted mt-0.5">
-                  {activeVehicle.battery} kWh · {activeVehicle.baseWh} Wh/km base
+                  {vehicle.battery} kWh · {vehicle.baseWh} Wh/km base
                 </div>
               </div>
 
               <RangeDisplay
                 result={result}
-                vehicle={activeVehicle}
-                customBattery={customBattery}
+                vehicle={vehicle}
               />
             </div>
 
