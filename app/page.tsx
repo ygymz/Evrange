@@ -79,10 +79,10 @@ export default function Home() {
     if (saved.extraLoad !== undefined) setExtraLoad(saved.extraLoad)
     if (saved.rimSize) setRimSize(saved.rimSize)
     
-    // Tiny delay to let the animation play out smoothly and avoid flash
+    // Delay matches the LoadingScreen's animation duration (3.5s)
     const timer = setTimeout(() => {
       setInitialized(true)
-    }, 800)
+    }, 3500)
 
     return () => clearTimeout(timer)
   }, [])
@@ -148,9 +148,6 @@ export default function Home() {
       <header className="border-b border-border sticky top-0 z-40 bg-surface-glass backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-              <Zap size={16} className="text-white dark:text-black" strokeWidth={2.5} />
-            </div>
             <div>
               <div className="text-base font-bold text-ink leading-none tracking-tight">{t('app.title')}</div>
               <div className="text-[10px] text-ink-muted font-medium tracking-wider uppercase mt-0.5">
