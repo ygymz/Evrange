@@ -43,7 +43,7 @@ export interface CalculatorResult {
 const G = 9.81              // m/s²
 const RHO_REF = 1.225       // kg/m³ at 15 °C, sea level
 const PARASITIC_LOAD = 250  // W — always-on systems (BMS, 12V, infotainment, lights)
-const CITY_STOPS_PER_KM = 2 // average stop-start cycles per km in city driving
+const CITY_STOPS_PER_KM = 2 // average stop-start cycles per km in free-flowing city driving
 
 function airDensity(tempC: number): number {
   return RHO_REF * (288.15 / (273.15 + tempC))
@@ -51,6 +51,14 @@ function airDensity(tempC: number): number {
 
 function kmhToMs(kmh: number): number {
   return kmh / 3.6
+}
+
+function cityStopsPerKm(speedKmh: number): number {
+  // Lower average city speed usually means denser traffic and more full stop cycles per km.
+  // Ramp from 2 stops/km at 50 km/h up to 4.5 stops/km at 30 km/h to avoid unrealistically low urban consumption.
+  const clampedSpeed = Math.max(30, Math.min(50, speedKmh))
+  const congestionFactor = 1 + ((50 - clampedSpeed) / 20) * 1.25
+  return CITY_STOPS_PER_KM * congestionFactor
 }
 
 // ── Vehicle Database ────────────────────────────────────────────────────────
@@ -262,7 +270,7 @@ function calculateRangePhysics(inputs: CalculatorInputs): CalculatorResult {
   const vCity = kmhToMs(citySpeed)
   const kineticPerStop = 0.5 * totalMass * vCity * vCity   // joules
   const netKineticPerStop = (kineticPerStop / p.drivetrainEff) - (kineticPerStop * p.regenEff)  // battery energy to accelerate minus recovered braking energy
-  const cyclingWhPerKm = (netKineticPerStop * CITY_STOPS_PER_KM) / 3600  // Wh/km
+  const cyclingWhPerKm = (netKineticPerStop * cityStopsPerKm(citySpeed)) / 3600  // Wh/km
   cityWh += cyclingWhPerKm
 
   // Highway: full speed, base Crr
