@@ -183,16 +183,20 @@ function hvacPower(tempC: number, hasHeatPump: boolean): number {
   const deltaT = targetC - tempC
 
   if (deltaT > 0) {
-    // Heating logic: Base load + deltaT slope
-    const heatingRequired = 200 + deltaT * 110 // Watts
+    // Heating logic: base cabin load + steeper cold-weather penalty below 10C.
+    // This better reflects cabin warm-up demand, colder glass surfaces, and more aggressive battery/cabin conditioning.
+    const mildHeating = 250 + deltaT * 120
+    const sub10Penalty = tempC < 10 ? Math.pow(10 - tempC, 1.2) * 45 : 0
+    const subZeroPenalty = tempC < 0 ? Math.pow(-tempC, 1.15) * 35 : 0
+    const heatingRequired = mildHeating + sub10Penalty + subZeroPenalty
 
     if (hasHeatPump) {
       // Heat pump COP (Coefficient of Performance) scales linearly with tempC
       // COP is usually ~3.5 at 15°C and drops to ~1.0 at -15°C
       const cop = Math.max(1.0, 1.2 + (tempC + 15) * 0.075)
-      return heatingRequired / cop
+      return Math.min(4200, heatingRequired / cop)
     }
-    return heatingRequired
+    return Math.min(5200, heatingRequired)
   } else if (deltaT < 0) {
     // Cooling logic (A/C is generally more efficient and scales slower)
     const coolingDelta = Math.abs(deltaT)
