@@ -12,7 +12,7 @@ export interface Vehicle {
   id: string
   name: string
   battery: number   // kWh
-  baseWh: number    // Wh/km — display-only reference (WLTP-like)
+  baseWh: number    // Wh/km — display-only reference baseline (real-world oriented)
   physics: PhysicsParams
 }
 
@@ -74,14 +74,14 @@ export const VEHICLES: Vehicle[] = [
     id: 'tesla-my-juniper-lr',
     name: 'Tesla Model Y Juniper LR AWD',
     battery: 79.0,
-    baseWh: 153,
+    baseWh: 166,
     physics: { mass: 1992, cd: 0.22, frontalArea: 2.62, crr: 0.009, drivetrainEff: 0.91, regenEff: 0.65, hasHeatPump: true },
   },
   {
     id: 'tesla-my-juniper-perf',
     name: 'Tesla Model Y Juniper Perf.',
     battery: 79.0,
-    baseWh: 162,
+    baseWh: 172,
     physics: { mass: 2033, cd: 0.22, frontalArea: 2.62, crr: 0.010, drivetrainEff: 0.91, regenEff: 0.65, hasHeatPump: true },
   },
   {
@@ -102,77 +102,77 @@ export const VEHICLES: Vehicle[] = [
     id: 'byd-sealion-7',
     name: 'BYD Sealion 7 Standard (RWD)',
     battery: 71.8,
-    baseWh: 175,
+    baseWh: 181,
     physics: { mass: 2160, cd: 0.28, frontalArea: 2.62, crr: 0.009, drivetrainEff: 0.90, regenEff: 0.65, hasHeatPump: true },
   },
   {
     id: 'byd-seal-rwd',
     name: 'BYD Seal Design RWD',
     battery: 61.5,
-    baseWh: 157,
+    baseWh: 172,
     physics: { mass: 1922, cd: 0.219, frontalArea: 2.30, crr: 0.009, drivetrainEff: 0.92, regenEff: 0.65, hasHeatPump: true },
   },
   {
     id: 'byd-dolphin-comfort',
     name: 'BYD Dolphin Comfort',
     battery: 60.4,
-    baseWh: 166,
+    baseWh: 173,
     physics: { mass: 1658, cd: 0.301, frontalArea: 2.33, crr: 0.009, drivetrainEff: 0.90, regenEff: 0.65, hasHeatPump: true },
   },
   {
     id: 'ioniq6-sr',
     name: 'Hyundai Ioniq 6 SR (RWD)',
     battery: 53.0,
-    baseWh: 137,
+    baseWh: 149,
     physics: { mass: 1775, cd: 0.21, frontalArea: 2.36, crr: 0.009, drivetrainEff: 0.92, regenEff: 0.70, hasHeatPump: true },
   },
   {
     id: 'ioniq5-sr',
     name: 'Hyundai Ioniq 5 SR (RWD)',
     battery: 63.0,
-    baseWh: 160,
+    baseWh: 174,
     physics: { mass: 1880, cd: 0.288, frontalArea: 2.55, crr: 0.009, drivetrainEff: 0.91, regenEff: 0.70, hasHeatPump: true },
   },
   {
     id: 'mercedes-cla-250',
     name: 'Mercedes CLA 250+ (Yeni)',
     battery: 85.0,
-    baseWh: 141,
+    baseWh: 148,
     physics: { mass: 2055, cd: 0.21, frontalArea: 2.29, crr: 0.009, drivetrainEff: 0.92, regenEff: 0.70, hasHeatPump: true },
   },
   {
     id: 'mercedes-glb-250',
     name: 'Mercedes GLB 250+ (Yeni)',
     battery: 85.0,
-    baseWh: 160,
+    baseWh: 173,
     physics: { mass: 2270, cd: 0.28, frontalArea: 2.64, crr: 0.009, drivetrainEff: 0.91, regenEff: 0.70, hasHeatPump: true },
   },
   {
     id: 'bmw-ix3-new',
     name: 'BMW iX3 (Yeni - NA5)',
     battery: 108.7,
-    baseWh: 169,
+    baseWh: 178,
     physics: { mass: 2360, cd: 0.24, frontalArea: 2.60, crr: 0.009, drivetrainEff: 0.91, regenEff: 0.65, hasHeatPump: true },
   },
   {
     id: 'togg-t10x-lr',
-    name: 'Togg T10X Uzun Menzil',
+    name: 'Togg T10X LR',
     battery: 85.0,
-    baseWh: 199,
+    baseWh: 195,
     physics: { mass: 2126, cd: 0.298, frontalArea: 2.66, crr: 0.010, drivetrainEff: 0.89, regenEff: 0.60, hasHeatPump: false },
   },
   {
     id: 'togg-t10f-lr',
-    name: 'Togg T10F Uzun Menzil',
+    name: 'Togg T10F LR',
     battery: 85.0,
-    baseWh: 167,
+    baseWh: 173,
     physics: { mass: 2000, cd: 0.226, frontalArea: 2.33, crr: 0.009, drivetrainEff: 0.90, regenEff: 0.65, hasHeatPump: false },
   },
   {
     id: 'renault-megane',
     name: 'Renault Megane E-Tech',
     battery: 60.0,
-    baseWh: 157,
+    baseWh: 158,
     physics: { mass: 1708, cd: 0.29, frontalArea: 2.24, crr: 0.009, drivetrainEff: 0.91, regenEff: 0.65, hasHeatPump: true },
   },
 ]
