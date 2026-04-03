@@ -261,7 +261,7 @@ function calculateRangePhysics(inputs: CalculatorInputs): CalculatorResult {
   // Stop-start acceleration energy: ½mv² per stop, partially recovered by regen
   const vCity = kmhToMs(citySpeed)
   const kineticPerStop = 0.5 * totalMass * vCity * vCity   // joules
-  const netKineticPerStop = kineticPerStop * (1 - p.regenEff) / p.drivetrainEff  // net after regen + drivetrain loss
+  const netKineticPerStop = (kineticPerStop / p.drivetrainEff) - (kineticPerStop * p.regenEff)  // battery energy to accelerate minus recovered braking energy
   const cyclingWhPerKm = (netKineticPerStop * CITY_STOPS_PER_KM) / 3600  // Wh/km
   cityWh += cyclingWhPerKm
 
