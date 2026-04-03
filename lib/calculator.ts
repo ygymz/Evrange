@@ -166,7 +166,7 @@ export const VEHICLES: Vehicle[] = [
     name: 'Togg T10F LR',
     battery: 85.0,
     baseWh: 173,
-    physics: { mass: 2000, cd: 0.226, frontalArea: 2.33, crr: 0.009, drivetrainEff: 0.90, regenEff: 0.65, hasHeatPump: false },
+    physics: { mass: 2220, cd: 0.226, frontalArea: 2.33, crr: 0.009, drivetrainEff: 0.90, regenEff: 0.65, hasHeatPump: false },
   },
   {
     id: 'renault-megane',
