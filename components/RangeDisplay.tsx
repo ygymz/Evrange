@@ -36,7 +36,7 @@ export function AnimatedNumber({ value }: { value: number }) {
 }
 
 function getRangeColor(ratio: number): string {
-  if (ratio > 0.65) return 'text-ink'
+  if (ratio > 0.65) return 'text-accent'
   if (ratio > 0.35) return 'text-ink-secondary'
   return 'text-ink-tertiary'
 }
@@ -94,7 +94,7 @@ export default function RangeDisplay({ result, vehicle }: Props) {
             <span className="text-[11px] font-bold text-ink-muted uppercase tracking-widest leading-none translate-y-px">km</span>
             <span className={`text-[10px] font-bold px-1.5 py-[3px] rounded-md leading-none inline-flex items-center ${
               result.range === maxRange ? 'bg-surface text-ink-muted' :
-              result.range > maxRange ? 'bg-accent-light text-accent border border-border' :
+              result.range > maxRange ? 'bg-accent-light text-accent border border-accent/20' :
               'bg-surface text-ink-tertiary border border-border'
             }`}>
               {result.range > maxRange ? '+' : ''}{Math.round(((result.range - maxRange) / maxRange) * 100)}%

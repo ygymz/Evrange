@@ -140,7 +140,7 @@ export default function Home() {
 
   const maxRange = Math.round((vehicle.battery * 1000) / vehicle.baseWh)
   const ratio = result.range / maxRange
-  const rangeColorClass = ratio > 0.65 ? 'text-ink' : ratio > 0.35 ? 'text-ink-secondary' : 'text-ink-tertiary'
+  const rangeColorClass = ratio > 0.65 ? 'text-accent' : ratio > 0.35 ? 'text-ink-secondary' : 'text-ink-tertiary'
 
   return (
     <div className="min-h-screen relative">
@@ -198,7 +198,7 @@ export default function Home() {
           </div>
           <div className={`text-[10px] font-bold mt-1 ${
               result.range === maxRange ? 'text-ink-muted' :
-              result.range > maxRange ? 'text-ink-secondary' :
+              result.range > maxRange ? 'text-accent' :
               'text-ink-tertiary'
           }`}>
             {result.range > maxRange ? '+' : ''}{Math.round(((result.range - maxRange) / maxRange) * 100)}%
@@ -243,7 +243,7 @@ export default function Home() {
                 max={45}
                 unit="°C"
                 icon={<Thermometer size={14} />}
-                colorStops={temperature < 0 ? '#6B6B6B' : temperature < 20 ? '#9B9B9B' : '#525252'}
+                colorStops={temperature < 0 ? '#0891B2' : temperature < 20 ? '#22A7C9' : '#F5A623'}
                 formatValue={formatTemp}
                 onChange={setTemperature}
               />

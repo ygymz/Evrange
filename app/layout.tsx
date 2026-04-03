@@ -26,7 +26,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark">
+        <ThemeProvider attribute="class" defaultTheme="light">
           <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
       </body>
