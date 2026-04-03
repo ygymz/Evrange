@@ -156,6 +156,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('truerange-lang', lang)
   }
 
+  useEffect(() => {
+    document.documentElement.lang = language
+  }, [language])
+
   const t = (key: string, params?: Record<string, string | number>) => {
     // Before client hydrates, default to 'tr' to match server render and prevent hydration mismatch
     const dict = dictionaries[isClient ? language : 'tr']
