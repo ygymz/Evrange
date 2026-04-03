@@ -149,10 +149,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div>
-              <div className="text-base font-bold text-ink leading-none tracking-tight">{t('app.title')}</div>
-              <div className="text-[10px] text-ink-muted font-medium tracking-wider uppercase mt-0.5">
-                {t('app.subtitle')}
-              </div>
+              <div className="text-base font-black text-ink leading-none tracking-[0.2em] uppercase">{t('app.title')}</div>
             </div>
           </div>
 
