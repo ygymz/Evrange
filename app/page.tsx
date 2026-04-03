@@ -16,9 +16,11 @@ import { VEHICLES, Vehicle, DrivingMix, calculateRange } from '@/lib/calculator'
 import VehicleSelector from '@/components/VehicleSelector'
 import SliderControl from '@/components/SliderControl'
 import DrivingMixControl from '@/components/DrivingMixControl'
-import RangeDisplay from '@/components/RangeDisplay'
+import RangeDisplay, { AnimatedNumber } from '@/components/RangeDisplay'
 import FactorControls from '@/components/FactorControls'
 import { useTranslation } from '@/lib/i18n'
+
+import LoadingScreen from '@/components/LoadingScreen'
 
 const DEFAULT_MIX: DrivingMix = { city: 10, highway: 90, rough: 0 }
 const STORAGE_KEY = 'truerange-state'
@@ -76,7 +78,13 @@ export default function Home() {
     if (saved.climateControl !== undefined) setClimateControl(saved.climateControl)
     if (saved.extraLoad !== undefined) setExtraLoad(saved.extraLoad)
     if (saved.rimSize) setRimSize(saved.rimSize)
-    setInitialized(true)
+    
+    // Tiny delay to let the animation play out smoothly and avoid flash
+    const timer = setTimeout(() => {
+      setInitialized(true)
+    }, 800)
+
+    return () => clearTimeout(timer)
   }, [])
 
   // Persist state to localStorage
@@ -126,14 +134,22 @@ export default function Home() {
 
   const formatTemp = (v: number) => (v >= 0 ? `+${v}` : `${v}`)
 
+  if (!initialized) {
+    return <LoadingScreen />
+  }
+
+  const maxRange = Math.round((vehicle.battery * 1000) / vehicle.baseWh)
+  const ratio = result.range / maxRange
+  const rangeColorClass = ratio > 0.65 ? 'text-accent' : ratio > 0.35 ? 'text-amber-600' : 'text-red-600'
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       {/* Header */}
       <header className="border-b border-border sticky top-0 z-40 bg-surface-glass backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-              <Zap size={16} className="text-white" strokeWidth={2.5} />
+              <Zap size={16} className="text-white dark:text-black" strokeWidth={2.5} />
             </div>
             <div>
               <div className="text-base font-bold text-ink leading-none tracking-tight">{t('app.title')}</div>
@@ -170,6 +186,31 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {/* Mobile Sticky Range Banner */}
+      <div className="lg:hidden sticky top-[65px] z-30 bg-surface-glass backdrop-blur-md border-b border-border px-5 py-3 flex items-center justify-between shadow-sm">
+        <div className="flex flex-col">
+          <span className="text-[10px] text-ink-muted font-bold tracking-widest uppercase">{t('range.estimated')}</span>
+          <span className="text-xs font-semibold text-ink mt-0.5 truncate max-w-[180px] sm:max-w-[300px]">
+            {vehicle.name}
+          </span>
+        </div>
+        <div className="flex flex-col items-end">
+          <div className="flex items-baseline gap-1">
+            <div className={`num text-2xl font-bold leading-none ${rangeColorClass} transition-colors duration-500`}>
+              <AnimatedNumber value={result.range} />
+            </div>
+            <div className="text-[10px] uppercase font-bold text-ink-muted tracking-widest">km</div>
+          </div>
+          <div className={`text-[10px] font-bold mt-1 ${
+              result.range === maxRange ? 'text-ink-muted' : 
+              result.range > maxRange ? 'text-accent' : 
+              'text-red-500'
+          }`}>
+            {result.range > maxRange ? '+' : ''}{Math.round(((result.range - maxRange) / maxRange) * 100)}%
+          </div>
+        </div>
+      </div>
 
       {/* Main */}
       <main className="max-w-6xl mx-auto px-5 sm:px-8 py-8">

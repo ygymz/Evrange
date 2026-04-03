@@ -141,7 +141,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setIsClient(true)
-    const stored = localStorage.getItem('ev-range-lang') as Language
+    const stored = localStorage.getItem('truerange-lang') as Language
     if (stored === 'en' || stored === 'tr') {
       setLanguageState(stored)
     } else if (navigator.language.startsWith('en')) {
@@ -153,7 +153,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang)
-    localStorage.setItem('ev-range-lang', lang)
+    localStorage.setItem('truerange-lang', lang)
   }
 
   const t = (key: string, params?: Record<string, string | number>) => {

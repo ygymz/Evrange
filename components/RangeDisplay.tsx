@@ -9,7 +9,7 @@ interface Props {
   vehicle: Vehicle
 }
 
-function AnimatedNumber({ value }: { value: number }) {
+export function AnimatedNumber({ value }: { value: number }) {
   const [displayed, setDisplayed] = useState(value)
   const frameRef = useRef<number>(0)
 
@@ -35,13 +35,6 @@ function AnimatedNumber({ value }: { value: number }) {
   return <>{displayed}</>
 }
 
-const LABEL_CONFIG = {
-  Excellent: { color: 'text-accent',    bg: 'bg-accent-light',  border: 'border-accent/20',    dot: 'bg-accent' },
-  Good:      { color: 'text-blue-600',  bg: 'bg-blue-50',       border: 'border-blue-200',     dot: 'bg-blue-500' },
-  Fair:      { color: 'text-amber-600', bg: 'bg-amber-50',      border: 'border-amber-200',    dot: 'bg-amber-500' },
-  Poor:      { color: 'text-red-600',   bg: 'bg-red-50',        border: 'border-red-200',      dot: 'bg-red-500' },
-}
-
 function getRangeColor(ratio: number): string {
   if (ratio > 0.65) return 'text-accent'
   if (ratio > 0.35) return 'text-amber-600'
@@ -49,9 +42,9 @@ function getRangeColor(ratio: number): string {
 }
 
 function getRangeArc(ratio: number): string {
-  if (ratio > 0.65) return '#0F766E'
-  if (ratio > 0.35) return '#D97706'
-  return '#B83B3B'
+  if (ratio > 0.65) return 'var(--accent)'
+  if (ratio > 0.35) return 'var(--warning)'
+  return 'var(--danger)'
 }
 
 export default function RangeDisplay({ result, vehicle }: Props) {
@@ -61,7 +54,6 @@ export default function RangeDisplay({ result, vehicle }: Props) {
   const ratio = result.range / maxRange
   const rangeColor = getRangeColor(ratio)
   const arcColor = getRangeArc(ratio)
-  const effConfig = LABEL_CONFIG[result.efficiencyLabel]
 
   const ringPct = Math.min(100, ratio * 100)
   const circumference = 2 * Math.PI * 58
@@ -93,10 +85,19 @@ export default function RangeDisplay({ result, vehicle }: Props) {
         </svg>
 
         <div className="text-center z-10">
-          <div className={`num text-5xl font-bold leading-none ${rangeColor} transition-colors duration-500`}>
+          <div className={`num text-5xl font-bold leading-none ${rangeColor} transition-colors duration-500 flex items-center justify-center gap-1`}>
             <AnimatedNumber value={result.range} />
           </div>
-          <div className="text-[11px] font-semibold text-ink-muted uppercase tracking-widest">km</div>
+          <div className="flex items-center justify-center gap-2 mt-1">
+            <span className="text-[11px] font-bold text-ink-muted uppercase tracking-widest leading-none translate-y-px">km</span>
+            <span className={`text-[10px] font-bold px-1.5 py-[3px] rounded-md leading-none inline-flex items-center ${
+              result.range === maxRange ? 'bg-surface text-ink-muted' : 
+              result.range > maxRange ? 'bg-accent-light text-accent border border-accent/20' : 
+              'bg-red-50 text-red-600 border border-red-200'
+            }`}>
+              {result.range > maxRange ? '+' : ''}{Math.round(((result.range - maxRange) / maxRange) * 100)}%
+            </span>
+          </div>
         </div>
       </div>
 
@@ -109,7 +110,7 @@ export default function RangeDisplay({ result, vehicle }: Props) {
       </div>
 
       {/* Secondary metrics */}
-      <div className="w-full grid grid-cols-3 gap-2">
+      <div className="w-full grid grid-cols-2 gap-2">
         <div className="p-3 rounded-xl bg-surface border border-border text-center">
           <div className="num text-lg font-bold text-ink">{result.efficiency}</div>
           <div className="text-[10px] text-ink-muted mt-0.5 font-medium">Wh/km</div>
@@ -118,14 +119,6 @@ export default function RangeDisplay({ result, vehicle }: Props) {
         <div className="p-3 rounded-xl bg-surface border border-border text-center">
           <div className="num text-lg font-bold text-ink">{result.batteryHealthPct}%</div>
           <div className="text-[10px] text-ink-muted mt-0.5 font-medium">{t('range.utilization')}</div>
-        </div>
-
-        <div className="p-3 rounded-xl bg-surface border border-border text-center">
-          <div className={`inline-flex items-center gap-1 border rounded-full px-2 py-0.5 ${effConfig.bg} ${effConfig.border}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${effConfig.dot}`} />
-            <span className={`text-[10px] font-bold ${effConfig.color}`}>{t(`rating.${result.efficiencyLabel}`)}</span>
-          </div>
-          <div className="text-[10px] text-ink-muted mt-1 font-medium">{t('range.rating')}</div>
         </div>
       </div>
 
