@@ -28,26 +28,26 @@ const SEGMENTS = [
     label: 'Highway',
     sublabel: 'Aero drag',
     icon: Milestone,
-    color: '#6366F1',
-    barColor: 'bg-indigo-500',
-    textColor: 'text-indigo-600 dark:text-indigo-400',
-    bgColor: 'bg-indigo-50 dark:bg-indigo-500/10',
-    borderColor: 'border-indigo-200 dark:border-indigo-500/30',
+    color: '#A0A0A0',
+    barColor: 'bg-neutral-400',
+    textColor: 'text-neutral-500 dark:text-neutral-400',
+    bgColor: 'bg-neutral-100 dark:bg-neutral-500/10',
+    borderColor: 'border-neutral-200 dark:border-neutral-500/30',
     badge: 'Aero',
-    badgeStyle: 'text-indigo-700 bg-indigo-50 dark:text-indigo-300 dark:bg-indigo-900/50',
+    badgeStyle: 'text-neutral-600 bg-neutral-100 dark:text-neutral-300 dark:bg-neutral-800/50',
   },
   {
     key: 'rough' as const,
     label: 'Rough Road',
     sublabel: 'Resistance',
     icon: Mountain,
-    color: '#D97706',
-    barColor: 'bg-amber-500',
-    textColor: 'text-amber-600 dark:text-amber-400',
-    bgColor: 'bg-amber-50 dark:bg-amber-500/10',
-    borderColor: 'border-amber-200 dark:border-amber-500/30',
+    color: '#525252',
+    barColor: 'bg-neutral-600',
+    textColor: 'text-neutral-600 dark:text-neutral-500',
+    bgColor: 'bg-neutral-100 dark:bg-neutral-600/10',
+    borderColor: 'border-neutral-300 dark:border-neutral-600/30',
     badge: 'Resist.',
-    badgeStyle: 'text-amber-700 bg-amber-50 dark:text-amber-300 dark:bg-amber-900/50',
+    badgeStyle: 'text-neutral-600 bg-neutral-100 dark:text-neutral-400 dark:bg-neutral-800/50',
   },
 ]
 
@@ -93,11 +93,11 @@ export default function DrivingMixControl({ mix, onChange }: Props) {
           style={{ width: `${mix.city}%` }}
         />
         <div
-          className="bg-indigo-500 transition-all duration-200"
+          className="bg-neutral-400 transition-all duration-200"
           style={{ width: `${mix.highway}%` }}
         />
         <div
-          className="bg-amber-500 transition-all duration-200 rounded-r-full"
+          className="bg-neutral-600 transition-all duration-200 rounded-r-full"
           style={{ width: `${mix.rough}%` }}
         />
       </div>

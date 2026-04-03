@@ -88,7 +88,7 @@ export default function FactorControls({
           onChange={(e) => onExtraLoad(Number(e.target.value))}
           className="slider-track w-full"
           style={{
-            background: `linear-gradient(to right, #6366F1 ${loadPct}%, var(--border) ${loadPct}%)`,
+            background: `linear-gradient(to right, var(--accent) ${loadPct}%, var(--border) ${loadPct}%)`,
           }}
         />
         <div className="flex justify-between">

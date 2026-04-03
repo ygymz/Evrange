@@ -36,9 +36,9 @@ export function AnimatedNumber({ value }: { value: number }) {
 }
 
 function getRangeColor(ratio: number): string {
-  if (ratio > 0.65) return 'text-accent'
-  if (ratio > 0.35) return 'text-amber-600'
-  return 'text-red-600'
+  if (ratio > 0.65) return 'text-ink'
+  if (ratio > 0.35) return 'text-ink-secondary'
+  return 'text-ink-tertiary'
 }
 
 function getRangeArc(ratio: number): string {
@@ -68,19 +68,21 @@ export default function RangeDisplay({ result, vehicle }: Props) {
           <circle
             cx="74" cy="74" r="58"
             fill="none"
-            stroke="#E5E2DA"
-            strokeWidth="5"
+            stroke="var(--border)"
+            strokeWidth="6"
           />
           {/* Progress arc */}
           <circle
             cx="74" cy="74" r="58"
             fill="none"
             stroke={arcColor}
-            strokeWidth="5"
+            strokeWidth="6"
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={dashOffset}
-            style={{ transition: 'stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s ease' }}
+            style={{
+              transition: 'stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s ease',
+            }}
           />
         </svg>
 
@@ -91,9 +93,9 @@ export default function RangeDisplay({ result, vehicle }: Props) {
           <div className="flex items-center justify-center gap-2 mt-1">
             <span className="text-[11px] font-bold text-ink-muted uppercase tracking-widest leading-none translate-y-px">km</span>
             <span className={`text-[10px] font-bold px-1.5 py-[3px] rounded-md leading-none inline-flex items-center ${
-              result.range === maxRange ? 'bg-surface text-ink-muted' : 
-              result.range > maxRange ? 'bg-accent-light text-accent border border-accent/20' : 
-              'bg-red-50 text-red-600 border border-red-200'
+              result.range === maxRange ? 'bg-surface text-ink-muted' :
+              result.range > maxRange ? 'bg-accent-light text-accent border border-border' :
+              'bg-surface text-ink-tertiary border border-border'
             }`}>
               {result.range > maxRange ? '+' : ''}{Math.round(((result.range - maxRange) / maxRange) * 100)}%
             </span>

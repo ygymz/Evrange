@@ -140,7 +140,7 @@ export default function Home() {
 
   const maxRange = Math.round((vehicle.battery * 1000) / vehicle.baseWh)
   const ratio = result.range / maxRange
-  const rangeColorClass = ratio > 0.65 ? 'text-accent' : ratio > 0.35 ? 'text-amber-600' : 'text-red-600'
+  const rangeColorClass = ratio > 0.65 ? 'text-ink' : ratio > 0.35 ? 'text-ink-secondary' : 'text-ink-tertiary'
 
   return (
     <div className="min-h-screen relative">
@@ -149,7 +149,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div>
-              <div className="text-base font-black text-ink leading-none tracking-[0.2em] uppercase">{t('app.title')}</div>
+              <div className="text-sm font-semibold text-ink leading-none tracking-[0.3em] uppercase">{t('app.title')}</div>
             </div>
           </div>
 
@@ -197,9 +197,9 @@ export default function Home() {
             <div className="text-[10px] uppercase font-bold text-ink-muted tracking-widest">km</div>
           </div>
           <div className={`text-[10px] font-bold mt-1 ${
-              result.range === maxRange ? 'text-ink-muted' : 
-              result.range > maxRange ? 'text-accent' : 
-              'text-red-500'
+              result.range === maxRange ? 'text-ink-muted' :
+              result.range > maxRange ? 'text-ink-secondary' :
+              'text-ink-tertiary'
           }`}>
             {result.range > maxRange ? '+' : ''}{Math.round(((result.range - maxRange) / maxRange) * 100)}%
           </div>
@@ -243,7 +243,7 @@ export default function Home() {
                 max={45}
                 unit="°C"
                 icon={<Thermometer size={14} />}
-                colorStops={temperature < 0 ? '#0891B2' : temperature < 20 ? '#6366F1' : '#D97706'}
+                colorStops={temperature < 0 ? '#6B6B6B' : temperature < 20 ? '#9B9B9B' : '#525252'}
                 formatValue={formatTemp}
                 onChange={setTemperature}
               />
@@ -341,7 +341,7 @@ function SectionHeader({
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
         <Icon size={14} className="text-ink-tertiary" />
-        <h3 className="text-sm font-semibold text-ink-secondary">{title}</h3>
+        <h3 className="text-xs font-medium text-ink-secondary uppercase tracking-[0.15em]">{title}</h3>
       </div>
       {badge && (
         <span className="text-[10px] text-ink-tertiary bg-surface border border-border px-2 py-0.5 rounded-full font-medium">
